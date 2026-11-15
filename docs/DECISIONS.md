@@ -47,3 +47,18 @@ TypeScript 7 (native port) is out but typescript-eslint supports `<6.1`, so 6.0 
 
 ### D14. Branch workflow
 This session may only push to `claude/nice-dijkstra-k7m4sp`, so all work goes on that branch and lands through one pull request at the end.
+
+### D15. Follow the specification where V8 deviates; prove it with an oracle
+Fuzzing found V8 reporting zero-width matches between the two halves of a surrogate pair in `u` mode (e.g. `/\B/u.exec('a😀').index === 2`), which ECMA-262 rules out (a `u` pattern sees code points). Copying a V8 bug would make results engine-specific, so SafeRegExp follows the spec. To keep the fuzzer honest, such cases are not silently skipped: a mismatch on a `u` pattern is re-run through `SpecOracle` (V8's matcher invoked sticky only at code-point boundaries, wrapped in the generic `RegExp.prototype` algorithms) and is counted as a "V8 deviation" only when SafeRegExp equals the oracle exactly; otherwise it is a failure. Counts are published separately.
+
+### D16. `split` uses one leftmost search per piece
+The spec's `@@split` tries a sticky match at every index, O(n) each, so O(n²) overall even with a linear matcher (the http-cache-semantics CVE input showed it). A leftmost search from `q` finds the first index where that sticky match would succeed, and the leftmost-first match starting there is the same match, so results are identical (verified by the fuzzer) and the cost is linear.
+
+### D17. Cheap speed-ups only, no DFA in 1.0
+Profiling showed thread bookkeeping dominating. Added: literal-prefix skip with `indexOf`, first-character set skip, start threads that skip the `SAVE 0` copy, and copy-on-write capture arrays (a path mutates its array in place until a `SPLIT` shares it). Literal search got ~3× faster. A lazy DFA would help much more but must respect the empty-check state; deferred and documented as the next step rather than rushed.
+
+### D18. Validating checker attacks
+"The whole search fails" is the right criterion for patterns used with `test`/`exec`. For patterns with `g` (used in replace/split loops) a pattern like `^\s*|\s*$` always matches somewhere, yet the loop still searches from every position; there the criterion is "no match starts inside the pumped part". For search-induced (unanchored) polynomial cases the checker also tries one-character prefixes (the Stack Overflow regex needs a non-space first so the `^` branch fails).
+
+### D19. Global iteration bound stated honestly
+Each `exec` is O(n·m). A `g` loop runs `exec` once per match, and a Pike VM must keep running past a found match while higher-priority threads live, so an adversarial pattern/input can make the *loop* O(n²·m). Rust's `regex` documents the same bound for its iterators. Documented in README and SECURITY.md rather than claimed away.

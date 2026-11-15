@@ -61,6 +61,8 @@ export interface Program {
   keyCount: number;
   /** Set of characters that can start a match, or null if a match can start without one. */
   firstChars: SetMatcher | null;
+  /** Literal string every match starts with ('' if none), used to skip ahead with indexOf. */
+  literalPrefix: string;
   flags: Flags;
   source: string;
   /** For each loop register, the quantifier id (AST repeat.id) it belongs to. */
@@ -230,11 +232,13 @@ class Compiler {
       keyOffset,
       keyCount: k,
       firstChars: null,
+      literalPrefix: '',
       flags: p.flags,
       source: p.source,
       regRepeat: this.regRepeat,
     };
     prog.firstChars = computeFirstChars(prog);
+    prog.literalPrefix = computeLiteralPrefix(prog);
     return prog;
   }
 
@@ -413,6 +417,18 @@ function computeFirstChars(prog: Program): SetMatcher | null {
   for (let i = 0; i < set.length; i += 2) covered += set[i + 1]! - set[i]! + 1;
   if (covered > max * 0.9) return null;
   return new SetMatcher(set);
+}
+
+/** The literal characters every match must begin with (straight-line CHARs from the start). */
+function computeLiteralPrefix(prog: Program): string {
+  let out = '';
+  for (let pc = 0; pc < prog.ops.length; pc++) {
+    const op = prog.ops[pc];
+    if (op === Op.SAVE) continue;
+    if (op !== Op.CHAR) break;
+    out += String.fromCodePoint(prog.arg1[pc]!);
+  }
+  return out;
 }
 
 export function compile(parsed: ParsedPattern, opts: CompileOptions = {}): Program {

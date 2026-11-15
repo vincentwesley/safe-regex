@@ -1,0 +1,644 @@
+{
+  "seed": 2026,
+  "patterns": 300000,
+  "patternsFromGrammar": 276064,
+  "patternsFromSyntaxSoup": 23936,
+  "inputs": 1135052,
+  "comparisons": 7606021,
+  "passed": 7606021,
+  "failed": 0,
+  "mismatches": 0,
+  "unsupportedAmongGenerated": 0,
+  "bothRejectedAsInvalid": 16229,
+  "v8SpecDeviations": 92,
+  "nativeTimeouts": 8,
+  "safeTimeouts": 0,
+  "durationMs": 388944,
+  "node": "v22.23.4",
+  "v8": "12.4.254.21-node.57",
+  "nativeTimeoutCases": [
+    {
+      "case": 28029,
+      "pattern": "\\w[^](?:𐐨?|(\\.?A|ǆ)??𐐨?)()|(^((?:.*)*)*A.)??𐐨𐐨$|A{2,}\\.(?:𐐨𐐨.)",
+      "flags": "im"
+    },
+    {
+      "case": 42940,
+      "pattern": "(?<n0>(?:\\u003f*?|[\\S\\dσ]|){1,}\\S|\\?)*.σσ+?|[^\\b?-ǅ](ǅ\\?*($ǅǅ{0,4})?)",
+      "flags": "imsuy"
+    },
+    {
+      "case": 97670,
+      "pattern": "\\{\\{(?:\\{|\\u002d{1,2}[\\D\\W]$(?:-?([^{]*\\{)+?))()*?|(?<n1>.*?(?:.(?<n0>||-\\D))?\\u002d*?|(([\\b\\-]\\{\\{[^\\--\\-\\--{]?)*[]?)\\{-+(()??)?)*(?<n2>(?:.$)+?.\\{)|(\\w\\D(-\\{-)*)\\{\\{",
+      "flags": "dsu"
+    },
+    {
+      "case": 120417,
+      "pattern": "É?(?:\\D|\\u{42}|\\S((?<n0>B.{2,}?B+?)*(?<n1>\\BB|ÉB{0,}B\\}{1,})??|\\w{0,4}?É*())+?)*((?:\\S\\W(?:B*?\\s)??|[^BB-}]\\s)?B[\\d])|",
+      "flags": "gu"
+    },
+    {
+      "case": 120690,
+      "pattern": "([|-İ][]{2,}?(?<n0>[İ|[]?(\\[[\\u0130]?\\u005b.).{2,4}\\S*?||)\\d)|(|(?:\\B.{0,}(?:.\\b\\[İ*?|^\\[\\d\\w?)*|.{1,3}?(?:))*?|((){0,3})(?:(?:\\|{2,}\\u005b)[^]?\\[)\\|{0,3}?)+(|^[]\\[?|)\\|(?:([^](\\B\\|İ|\\u0130.\\|)(?:\\s?\\d?.{0,}))|\\|\\|(.\\[$\\d|.{1,}?(\\u{5b}\\[\\[?||\\[\\[)(?:\\[\\[[]){0}(\\[[\\u005b]|$[\\u{5b}[İ])|\\|\\|)\\w|\\|\\[().?)|",
+      "flags": "u"
+    },
+    {
+      "case": 164267,
+      "pattern": "(?:\ud83d*(?<n0>|\\W|\\+*\\+{1,}[+\ud83d-\ud83d𐐨])*?(\ud83d|.|\\D\\u00df\ud83d{2,}?\\+)*|ß|\\+{2,4}\ud83d+[^+-+𐐨](||\\W\\+.𐐨)+)*(?:\ud83d{1,}?(ß{0,0}\\W)[^])+?\ud83d\\u002b",
+      "flags": "gy"
+    },
+    {
+      "case": 176802,
+      "pattern": "(?<n1>(?<n0>(?:|[😀😀]😀)*(.{0,}?)()()*)+?(😀{1,}).[^𐐨𐐨]){1,}(😀{1,3}?()$]||)[^𐐨]{2,}?",
+      "flags": ""
+    },
+    {
+      "case": 282563,
+      "pattern": "(?:μ?((?:ǆ*ǆI)*?\\b\\.*?)ǆ)\\.|(?:(?:\\S{0,}|()\\.(\\._{2}\\ca)){2,4}||ǆ\\u01c6_)+\\b($[^]\\b)",
+      "flags": ""
+    }
+  ],
+  "v8DeviationExamples": [
+    {
+      "case": 2092,
+      "op": "split",
+      "pattern": "(\\u{10428}I+.\\D)?𐐨?\\B",
+      "flags": "dsu",
+      "input": "II𐐨𐐨-𐐨I𐐨𐐨𐐨II I𐐀",
+      "lastIndex": 0,
+      "v8": [
+        "I",
+        null,
+        "I",
+        null,
+        "",
+        null,
+        "-",
+        "𐐨I𐐨𐐨",
+        "𐐨I",
+        null,
+        "I I\ud801",
+        null,
+        "\udc00"
+      ],
+      "spec": [
+        "I",
+        null,
+        "I",
+        null,
+        "",
+        null,
+        "-",
+        "𐐨I𐐨𐐨",
+        "𐐨I",
+        null,
+        "I I𐐀"
+      ]
+    },
+    {
+      "case": 5037,
+      "op": "split",
+      "pattern": "\\B",
+      "flags": "iu",
+      "input": "?c😀😀c-c😀ǆc?cσǆ",
+      "lastIndex": 0,
+      "v8": [
+        "?c\ud83d",
+        "\ude00",
+        "😀c-c\ud83d",
+        "\ude00",
+        "ǆc?cσ",
+        "ǆ"
+      ],
+      "spec": [
+        "?c😀",
+        "😀c-c😀",
+        "ǆc?cσ",
+        "ǆ"
+      ]
+    },
+    {
+      "case": 7489,
+      "op": "split",
+      "pattern": "\\B(((?:.É*){0,}?)\\w*?(\\u00c9*)|(\\w)?\\{)",
+      "flags": "u",
+      "input": "ÉÉÉ{{É{É{1𐐨",
+      "lastIndex": 0,
+      "v8": [
+        "",
+        "ÉÉÉ",
+        "",
+        "ÉÉÉ",
+        null,
+        "{",
+        "",
+        "",
+        "",
+        null,
+        "{",
+        "É",
+        "",
+        "É",
+        null,
+        "{",
+        "É",
+        "",
+        "É",
+        null,
+        "{1\ud801",
+        "",
+        "",
+        "",
+        null,
+        "\udc28"
+      ],
+      "spec": [
+        "",
+        "ÉÉÉ",
+        "",
+        "ÉÉÉ",
+        null,
+        "{",
+        "",
+        "",
+        "",
+        null,
+        "{",
+        "É",
+        "",
+        "É",
+        null,
+        "{",
+        "É",
+        "",
+        "É",
+        null,
+        "{1𐐨"
+      ]
+    },
+    {
+      "case": 9798,
+      "op": "split",
+      "pattern": "[](?:){3}|\\B",
+      "flags": "msu",
+      "input": "Ixx😀x😀I😀I😀Xé",
+      "lastIndex": 5,
+      "v8": [
+        "I",
+        "x",
+        "x\ud83d",
+        "\ude00x\ud83d",
+        "\ude00I\ud83d",
+        "\ude00I\ud83d",
+        "\ude00Xé"
+      ],
+      "spec": [
+        "I",
+        "x",
+        "x😀x😀I😀I😀Xé"
+      ]
+    },
+    {
+      "case": 9798,
+      "op": "split",
+      "pattern": "[](?:){3}|\\B",
+      "flags": "msu",
+      "input": "😀IIx/xǄ😀😀😀x😀I😀😀(",
+      "lastIndex": 0,
+      "v8": [
+        "😀I",
+        "I",
+        "x/xǄ",
+        "😀",
+        "😀",
+        "😀x\ud83d",
+        "\ude00I\ud83d",
+        "\ude00",
+        "😀",
+        "("
+      ],
+      "spec": [
+        "😀I",
+        "I",
+        "x/xǄ",
+        "😀",
+        "😀",
+        "😀x😀I😀",
+        "😀",
+        "("
+      ]
+    },
+    {
+      "case": 9798,
+      "op": "split",
+      "pattern": "[](?:){3}|\\B",
+      "flags": "msu",
+      "input": ")𐐀|xIxII😀xx😀Ia😀😀",
+      "lastIndex": 0,
+      "v8": [
+        ")",
+        "𐐀",
+        "|x",
+        "I",
+        "x",
+        "I",
+        "I\ud83d",
+        "\ude00x",
+        "x\ud83d",
+        "\ude00I",
+        "a\ud83d",
+        "\ude00",
+        "😀"
+      ],
+      "spec": [
+        ")",
+        "𐐀",
+        "|x",
+        "I",
+        "x",
+        "I",
+        "I😀x",
+        "x😀I",
+        "a😀",
+        "😀"
+      ]
+    },
+    {
+      "case": 15085,
+      "op": "split",
+      "pattern": "\\B",
+      "flags": "su",
+      "input": "A IkA 𐐨AAA𐐨𐐨",
+      "lastIndex": 16,
+      "v8": [
+        "A I",
+        "k",
+        "A ",
+        "𐐨A",
+        "A",
+        "A\ud801",
+        "\udc28",
+        "𐐨"
+      ],
+      "spec": [
+        "A I",
+        "k",
+        "A ",
+        "𐐨A",
+        "A",
+        "A𐐨",
+        "𐐨"
+      ]
+    },
+    {
+      "case": 15101,
+      "op": "split",
+      "pattern": "\\B",
+      "flags": "u",
+      "input": "sςμs*ς***BBss𐐨ς*",
+      "lastIndex": 0,
+      "v8": [
+        "sς",
+        "μs*",
+        "ς",
+        "*",
+        "*",
+        "*B",
+        "B",
+        "s",
+        "s\ud801",
+        "\udc28",
+        "ς",
+        "*"
+      ],
+      "spec": [
+        "sς",
+        "μs*",
+        "ς",
+        "*",
+        "*",
+        "*B",
+        "B",
+        "s",
+        "s𐐨",
+        "ς",
+        "*"
+      ]
+    },
+    {
+      "case": 18894,
+      "op": "split",
+      "pattern": "(?:\\B)(?<n0>é{0,}(?:)*?)",
+      "flags": "imu",
+      "input": "[s𐐨﻿É𐐨sé",
+      "lastIndex": 0,
+      "v8": [
+        "[s\ud801",
+        "",
+        "\udc28",
+        "",
+        "﻿",
+        "É",
+        "𐐨sé"
+      ],
+      "spec": [
+        "[s𐐨",
+        "",
+        "﻿",
+        "É",
+        "𐐨sé"
+      ]
+    },
+    {
+      "case": 18894,
+      "op": "split",
+      "pattern": "(?:\\B)(?<n0>é{0,}(?:)*?)",
+      "flags": "imu",
+      "input": "[Ké𐐨[s[éé[s0𐐨é$",
+      "lastIndex": 0,
+      "v8": [
+        "[Ké",
+        "",
+        "𐐨",
+        "",
+        "[s[",
+        "éé",
+        "[s",
+        "",
+        "0\ud801",
+        "",
+        "\udc28",
+        "é",
+        "$"
+      ],
+      "spec": [
+        "[Ké",
+        "",
+        "𐐨",
+        "",
+        "[s[",
+        "éé",
+        "[s",
+        "",
+        "0𐐨",
+        "é",
+        "$"
+      ]
+    },
+    {
+      "case": 21489,
+      "op": "exec",
+      "pattern": "\\B",
+      "flags": "giu",
+      "input": "x😀ẞ😀  😀😀_xß ba",
+      "lastIndex": 0,
+      "v8": {
+        "m": {
+          "arr": [
+            ""
+          ],
+          "index": 2
+        },
+        "lastIndex": 2
+      },
+      "spec": {
+        "m": {
+          "arr": [
+            ""
+          ],
+          "index": 3
+        },
+        "lastIndex": 3
+      }
+    },
+    {
+      "case": 21489,
+      "op": "replace",
+      "pattern": "\\B",
+      "flags": "giu",
+      "input": "😀😀x😀9x😀 😀",
+      "lastIndex": 13,
+      "v8": "<|$1|>😀<|$1|😀>😀x\ud83d<|$1|😀😀x\ud83d>\ude009<|$1|😀😀x😀9>x\ud83d<|$1|😀😀x😀9x\ud83d>\ude00<|$1|😀😀x😀9x😀> <|$1|😀😀x😀9x😀 >😀<|$1|😀😀x😀9x😀 😀>",
+      "spec": "<|$1|>😀<|$1|😀>😀x😀9<|$1|😀😀x😀9>x😀<|$1|😀😀x😀9x😀> <|$1|😀😀x😀9x😀 >😀<|$1|😀😀x😀9x😀 😀>"
+    },
+    {
+      "case": 24879,
+      "op": "split",
+      "pattern": "\\^{1,}|(?<n0>|\\*k)*?😀?\\u{5e}|\\B(?:😀{0,0}😀?|[^]\\^k{1,2}?){1,4}(?:)(?<n1>)",
+      "flags": "u",
+      "input": "ǆſ^k9k😀",
+      "lastIndex": 2,
+      "v8": [
+        "ǆ",
+        null,
+        "",
+        "9",
+        null,
+        "",
+        "k\ud83d",
+        null,
+        "",
+        "\ude00"
+      ],
+      "spec": [
+        "ǆ",
+        null,
+        "",
+        "9",
+        null,
+        "",
+        "k😀"
+      ]
+    },
+    {
+      "case": 32011,
+      "op": "split",
+      "pattern": "\\B",
+      "flags": "mu",
+      "input": "bsbsb😀s",
+      "lastIndex": 0,
+      "v8": [
+        "b",
+        "s",
+        "b",
+        "s",
+        "b\ud83d",
+        "\ude00s"
+      ],
+      "spec": [
+        "b",
+        "s",
+        "b",
+        "s",
+        "b😀s"
+      ]
+    },
+    {
+      "case": 32660,
+      "op": "exec",
+      "pattern": "𐐀",
+      "flags": "gu",
+      "input": "_μǄ𐐀ςǄǄς",
+      "lastIndex": 4,
+      "v8": {
+        "m": null,
+        "lastIndex": 0
+      },
+      "spec": {
+        "m": {
+          "arr": [
+            "𐐀"
+          ],
+          "index": 3
+        },
+        "lastIndex": 5
+      }
+    },
+    {
+      "case": 33400,
+      "op": "split",
+      "pattern": "\\B|(?<n0>(?:\\D$)\\w+.)|\\*+",
+      "flags": "imsu",
+      "input": " \t ) ))9  )*9😀\t\t",
+      "lastIndex": 14,
+      "v8": [
+        " ",
+        null,
+        "\t",
+        null,
+        " ",
+        null,
+        ")",
+        null,
+        " ",
+        null,
+        ")",
+        null,
+        ")9 ",
+        null,
+        " ",
+        null,
+        ")",
+        null,
+        "*9\ud83d",
+        null,
+        "\ude00",
+        null,
+        "\t",
+        null,
+        "\t"
+      ],
+      "spec": [
+        " ",
+        null,
+        "\t",
+        null,
+        " ",
+        null,
+        ")",
+        null,
+        " ",
+        null,
+        ")",
+        null,
+        ")9 ",
+        null,
+        " ",
+        null,
+        ")",
+        null,
+        "*9😀",
+        null,
+        "\t",
+        null,
+        "\t"
+      ]
+    },
+    {
+      "case": 34300,
+      "op": "exec",
+      "pattern": "\\B",
+      "flags": "isu",
+      "input": "_𐐀ǄǄ\ude00\ude00A_\ude00Ǆ{AA",
+      "lastIndex": 0,
+      "v8": {
+        "m": {
+          "arr": [
+            ""
+          ],
+          "index": 2
+        },
+        "lastIndex": 0
+      },
+      "spec": {
+        "m": {
+          "arr": [
+            ""
+          ],
+          "index": 3
+        },
+        "lastIndex": 0
+      }
+    },
+    {
+      "case": 45978,
+      "op": "exec-twice",
+      "pattern": "𐐀A|\\B𐐀*",
+      "flags": "gmsu",
+      "input": "𐐀A𐐀x𐐀𐐀BAXsİ𐐀A",
+      "lastIndex": 0,
+      "v8": {
+        "m1": {
+          "arr": [
+            "𐐀A"
+          ],
+          "index": 0
+        },
+        "li": 3,
+        "m2": {
+          "arr": [
+            ""
+          ],
+          "index": 4
+        },
+        "li2": 4
+      },
+      "spec": {
+        "m1": {
+          "arr": [
+            "𐐀A"
+          ],
+          "index": 0
+        },
+        "li": 3,
+        "m2": {
+          "arr": [
+            "𐐀"
+          ],
+          "index": 8
+        },
+        "li2": 10
+      }
+    },
+    {
+      "case": 45978,
+      "op": "replace",
+      "pattern": "𐐀A|\\B𐐀*",
+      "flags": "gmsu",
+      "input": "B0+AAX𐐀XB𐐀σ𐐀𐐀BX",
+      "lastIndex": 5,
+      "v8": "B<|$1|B>0+A<|$1|B0+A>A<|$1|B0+AA>X\ud801<|$1|B0+AAX\ud801>\udc00X<|$1|B0+AAX𐐀X>B\ud801<|$1|B0+AAX𐐀XB\ud801>\udc00<|$1|B0+AAX𐐀XB𐐀>σ<𐐀𐐀|$1|B0+AAX𐐀XB𐐀σ>B<|$1|B0+AAX𐐀XB𐐀σ𐐀𐐀B>X",
+      "spec": "B<|$1|B>0+A<|$1|B0+A>A<|$1|B0+AA>X𐐀X<|$1|B0+AAX𐐀X>B𐐀<|$1|B0+AAX𐐀XB𐐀>σ<𐐀𐐀|$1|B0+AAX𐐀XB𐐀σ>B<|$1|B0+AAX𐐀XB𐐀σ𐐀𐐀B>X"
+    },
+    {
+      "case": 47757,
+      "op": "replace",
+      "pattern": "(?:\\s{1,3}?\\r\\b|K\\u{61}a?|K{1}?a*)[^\\r-K\\r][\\da\\w]|\\.{1}.\\r\\x61*|\\B",
+      "flags": "dgisu",
+      "input": "\rK.[K.aa😀\r\rK.\r",
+      "lastIndex": 0,
+      "v8": "<|$1|>\rK.<|$1|\rK.>[K.a<|$1|\rK.[K.a>a\ud83d<|$1|\rK.[K.aa\ud83d>\ude00<|$1|\rK.[K.aa😀>\r<|$1|\rK.[K.aa😀\r>\rK.<|$1|\rK.[K.aa😀\r\rK.>\r<|$1|\rK.[K.aa😀\r\rK.\r>",
+      "spec": "<|$1|>\rK.<|$1|\rK.>[K.a<|$1|\rK.[K.a>a😀<|$1|\rK.[K.aa😀>\r<|$1|\rK.[K.aa😀\r>\rK.<|$1|\rK.[K.aa😀\r\rK.>\r<|$1|\rK.[K.aa😀\r\rK.\r>"
+    }
+  ]
+}

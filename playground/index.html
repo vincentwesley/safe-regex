@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>safe-regex playground</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>safe-regex <span class="sub">playground</span></h1>
+    <p class="lede">A JavaScript-compatible regex engine that matches in linear time. Draw the automaton for a pattern, race it against your browser's built-in engine on a hostile input, and check which of your patterns would blow up.</p>
+  </header>
+
+  <section class="pattern-bar" aria-label="Pattern">
+    <label class="field grow">
+      <span>Pattern</span>
+      <span class="slashed"><span class="slash">/</span><input id="pattern" spellcheck="false" autocomplete="off" value="^(a+)+$"><span class="slash">/</span></span>
+    </label>
+    <label class="field flags">
+      <span>Flags</span>
+      <input id="flags" spellcheck="false" autocomplete="off" value="" maxlength="8">
+    </label>
+    <label class="field">
+      <span>Examples</span>
+      <select id="examples"></select>
+    </label>
+  </section>
+  <div id="pattern-status" class="status-line" role="status"></div>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="match">Match</button>
+    <button role="tab" aria-selected="false" data-tab="automaton">Automaton</button>
+    <button role="tab" aria-selected="false" data-tab="race">Race</button>
+    <button role="tab" aria-selected="false" data-tab="checker">ReDoS checker</button>
+  </nav>
+
+  <main>
+    <section id="tab-match" class="panel" role="tabpanel">
+      <label class="field"><span>Test string</span>
+        <textarea id="subject" rows="4" spellcheck="false">aaaaaaaa</textarea></label>
+      <div id="match-out" class="match-out"></div>
+      <div id="groups-out"></div>
+    </section>
+
+    <section id="tab-automaton" class="panel" role="tabpanel" hidden>
+      <p class="hint">The automaton a backtracking engine explores (ε-free NFA): each node consumes one character class from the pattern; an edge marked <strong>×2</strong> can be taken along two different paths, and nodes outlined in red belong to the part of the pattern the ReDoS checker blames — together, the ambiguity that makes backtracking explode. Hover a node to see its part of the pattern. SafeRegExp runs the same automaton as a Pike VM: all paths at once, one pass over the input.</p>
+      <div id="graph" class="graph"></div>
+      <details><summary>Pike VM program (bytecode)</summary><pre id="program"></pre></details>
+    </section>
+
+    <section id="tab-race" class="panel" role="tabpanel" hidden>
+      <p class="hint">Both engines run in Web Workers on growing hostile inputs. The built-in engine is terminated if a single match takes longer than the time limit.</p>
+      <div class="race-controls">
+        <label class="field grow"><span>Hostile input = prefix + pump × n + suffix</span>
+          <span class="attack"><input id="atk-prefix" placeholder="prefix" spellcheck="false"><input id="atk-pump" placeholder="pump" spellcheck="false"><input id="atk-suffix" placeholder="suffix" spellcheck="false"></span>
+        </label>
+        <label class="field"><span>Time limit</span>
+          <select id="race-limit"><option value="1000">1 s</option><option value="3000" selected>3 s</option><option value="10000">10 s</option></select>
+        </label>
+        <button id="race-go" class="primary">Start race</button>
+        <button id="race-stop">Stop</button>
+      </div>
+      <div id="race-note" class="hint"></div>
+      <div id="race-chart" class="chart"></div>
+      <table id="race-table" class="data"><thead><tr><th>n</th><th>input length</th><th>SafeRegExp</th><th>built-in RegExp</th></tr></thead><tbody></tbody></table>
+    </section>
+
+    <section id="tab-checker" class="panel" role="tabpanel" hidden>
+      <p class="hint">One pattern per line, either plain (<code>^(a+)+$</code>) or with slashes and flags (<code>/\s+$/g</code>). The checker finds ambiguity in the automaton, explains it, and builds an attack string; <em>Confirm</em> times your browser's engine on it.</p>
+      <textarea id="checker-in" rows="7" spellcheck="false">^(a+)+$
+/^[\s\u200c]+|[\s\u200c]+$/
+^\d{3}-\d{4}$
+/(\\*)"/g
+^(?:[a-z0-9]+\.)*[a-z]+$
+(a)\1</textarea>
+      <button id="checker-go" class="primary">Check patterns</button>
+      <div id="checker-out"></div>
+    </section>
+  </main>
+
+  <footer>Engine source, tests and method: <a href="https://github.com/vincentwesley/safe-regex">github.com/vincentwesley/safe-regex</a> · MIT licence</footer>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

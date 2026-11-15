@@ -1,0 +1,442 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 942" width="1020" height="942" font-family="system-ui, -apple-system, Segoe UI, sans-serif">
+<rect width="1020" height="942" fill="#fcfcfb"/>
+<text x="10" y="24" font-size="16" font-weight="600" fill="#0b0b0b">Time to reject a hostile input (log–log): SafeRegExp stays linear, the built-in engine does not</text>
+<text x="10" y="44" font-size="11" fill="#52514e">v22.23.4 (V8 12.4.254.21-node.57), Intel(R) Xeon(R) Processor @ 2.10GHz. Median of 5 runs per point, each point in a fresh process; native killed after 10000 ms (×).</text>
+<line x1="10" y1="62" x2="30" y2="62" stroke="#2a78d6" stroke-width="2"/><text x="35" y="66" font-size="12" fill="#0b0b0b">SafeRegExp</text>
+<line x1="120" y1="62" x2="140" y2="62" stroke="#eb6834" stroke-width="2"/><text x="145" y="66" font-size="12" fill="#0b0b0b">built-in RegExp</text>
+<text x="14" y="94" font-size="12" font-weight="600" fill="#0b0b0b">owasp-nested-plus</text>
+<text x="14" y="107" font-size="10" fill="#52514e">slope: safe 0.93 · native timeout</text>
+<line x1="54" x2="248" y1="220" y2="220" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="223" font-size="9" text-anchor="end" fill="#52514e">0.001ms</text>
+<line x1="54" x2="248" y1="204.85714285714286" y2="204.85714285714286" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="207.85714285714286" font-size="9" text-anchor="end" fill="#52514e">0.01ms</text>
+<line x1="54" x2="248" y1="189.71428571428572" y2="189.71428571428572" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="192.71428571428572" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="54" x2="248" y1="174.57142857142858" y2="174.57142857142858" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="177.57142857142858" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="54" x2="248" y1="159.42857142857144" y2="159.42857142857144" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="162.42857142857144" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="54" x2="248" y1="144.28571428571428" y2="144.28571428571428" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="147.28571428571428" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="54" x2="248" y1="129.14285714285717" y2="129.14285714285717" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="132.14285714285717" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="54" x2="248" y1="114" y2="114" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="117" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="54" y="233" font-size="9" text-anchor="middle" fill="#52514e">n=8</text>
+<text x="113.6923076923077" y="233" font-size="9" text-anchor="middle" fill="#52514e">n=128</text>
+<text x="248" y="233" font-size="9" text-anchor="middle" fill="#52514e">n=64k</text>
+<path d="M54.0,214.1L62.7,199.6L68.9,180.9L73.7,162.9L77.7,144.4L81.0,126.5" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M54.0,185.3L62.7,184.7L68.9,184.4L73.7,184.9L77.7,184.8L81.0,183.9L83.8,180.5L92.6,179.3L98.8,178.0L113.7,175.3L128.6,170.5L143.5,168.7L158.5,165.0L173.4,169.1L188.3,165.6L203.2,161.6L218.2,159.9L233.1,154.0L248.0,148.1" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M79.84615384615385,110L87.84615384615385,118M79.84615384615385,118L87.84615384615385,110" stroke="#eb6834" stroke-width="2"/>
+<text x="264" y="94" font-size="12" font-weight="600" fill="#0b0b0b">owasp-letters-star</text>
+<text x="264" y="107" font-size="10" fill="#52514e">slope: safe 0.90 · native timeout</text>
+<line x1="304" x2="498" y1="220" y2="220" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="223" font-size="9" text-anchor="end" fill="#52514e">0.001ms</text>
+<line x1="304" x2="498" y1="204.85714285714286" y2="204.85714285714286" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="207.85714285714286" font-size="9" text-anchor="end" fill="#52514e">0.01ms</text>
+<line x1="304" x2="498" y1="189.71428571428572" y2="189.71428571428572" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="192.71428571428572" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="304" x2="498" y1="174.57142857142858" y2="174.57142857142858" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="177.57142857142858" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="304" x2="498" y1="159.42857142857144" y2="159.42857142857144" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="162.42857142857144" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="304" x2="498" y1="144.28571428571428" y2="144.28571428571428" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="147.28571428571428" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="304" x2="498" y1="129.14285714285717" y2="129.14285714285717" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="132.14285714285717" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="304" x2="498" y1="114" y2="114" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="117" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="304" y="233" font-size="9" text-anchor="middle" fill="#52514e">n=8</text>
+<text x="363.6923076923077" y="233" font-size="9" text-anchor="middle" fill="#52514e">n=128</text>
+<text x="498" y="233" font-size="9" text-anchor="middle" fill="#52514e">n=64k</text>
+<path d="M304.0,213.4L312.7,198.1L318.9,180.5L323.7,162.1L327.7,143.6L331.0,126.7" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M304.0,182.5L312.7,182.7L318.9,185.1L323.7,184.1L327.7,182.0L331.0,182.0L333.8,179.7L342.6,180.4L348.8,182.7L363.7,176.1L378.6,172.1L393.5,170.3L408.5,166.1L423.4,168.9L438.3,166.7L453.2,166.5L468.2,159.7L483.1,155.9L498.0,151.4" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M329.84615384615387,110L337.84615384615387,118M329.84615384615387,118L337.84615384615387,110" stroke="#eb6834" stroke-width="2"/>
+<text x="514" y="94" font-size="12" font-weight="600" fill="#0b0b0b">owasp-alt-overlap</text>
+<text x="514" y="107" font-size="10" fill="#52514e">slope: safe 0.88 · native timeout</text>
+<line x1="554" x2="748" y1="220" y2="220" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="223" font-size="9" text-anchor="end" fill="#52514e">0.001ms</text>
+<line x1="554" x2="748" y1="204.85714285714286" y2="204.85714285714286" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="207.85714285714286" font-size="9" text-anchor="end" fill="#52514e">0.01ms</text>
+<line x1="554" x2="748" y1="189.71428571428572" y2="189.71428571428572" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="192.71428571428572" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="554" x2="748" y1="174.57142857142858" y2="174.57142857142858" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="177.57142857142858" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="554" x2="748" y1="159.42857142857144" y2="159.42857142857144" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="162.42857142857144" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="554" x2="748" y1="144.28571428571428" y2="144.28571428571428" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="147.28571428571428" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="554" x2="748" y1="129.14285714285717" y2="129.14285714285717" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="132.14285714285717" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="554" x2="748" y1="114" y2="114" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="117" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="554" y="233" font-size="9" text-anchor="middle" fill="#52514e">n=8</text>
+<text x="613.6923076923077" y="233" font-size="9" text-anchor="middle" fill="#52514e">n=128</text>
+<text x="748" y="233" font-size="9" text-anchor="middle" fill="#52514e">n=64k</text>
+<path d="M554.0,210.7L562.7,212.8L568.9,201.0L573.7,186.3L577.7,173.9L581.0,163.5L583.8,150.5" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M554.0,189.9L562.7,184.8L568.9,185.5L573.7,184.7L577.7,183.4L581.0,185.7L583.8,182.9L592.6,182.4L598.8,178.7L613.7,178.5L628.6,172.6L643.5,171.1L658.5,166.8L673.4,169.4L688.3,168.8L703.2,164.7L718.2,161.1L733.1,157.0L748.0,152.5" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M588.5755942415311,110L596.5755942415311,118M588.5755942415311,118L596.5755942415311,110" stroke="#eb6834" stroke-width="2"/>
+<text x="764" y="94" font-size="12" font-weight="600" fill="#0b0b0b">owasp-alt-optional</text>
+<text x="764" y="107" font-size="10" fill="#52514e">slope: safe 1.06 · native timeout</text>
+<line x1="804" x2="998" y1="220" y2="220" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="223" font-size="9" text-anchor="end" fill="#52514e">0.001ms</text>
+<line x1="804" x2="998" y1="204.85714285714286" y2="204.85714285714286" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="207.85714285714286" font-size="9" text-anchor="end" fill="#52514e">0.01ms</text>
+<line x1="804" x2="998" y1="189.71428571428572" y2="189.71428571428572" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="192.71428571428572" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="804" x2="998" y1="174.57142857142858" y2="174.57142857142858" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="177.57142857142858" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="804" x2="998" y1="159.42857142857144" y2="159.42857142857144" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="162.42857142857144" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="804" x2="998" y1="144.28571428571428" y2="144.28571428571428" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="147.28571428571428" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="804" x2="998" y1="129.14285714285717" y2="129.14285714285717" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="132.14285714285717" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="804" x2="998" y1="114" y2="114" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="117" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="804" y="233" font-size="9" text-anchor="middle" fill="#52514e">n=8</text>
+<text x="863.6923076923077" y="233" font-size="9" text-anchor="middle" fill="#52514e">n=128</text>
+<text x="998" y="233" font-size="9" text-anchor="middle" fill="#52514e">n=64k</text>
+<path d="M804.0,207.0L812.7,189.8L818.9,168.2L823.7,152.7L827.7,134.3L831.0,116.0" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M804.0,187.2L812.7,186.8L818.9,183.1L823.7,184.4L827.7,181.4L831.0,183.5L833.8,182.7L842.6,179.4L848.8,178.6L863.7,174.0L878.6,173.6L893.5,169.0L908.5,163.9L923.4,167.4L938.3,168.0L953.2,162.2L968.2,158.5L983.1,152.7L998.0,148.5" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M829.8461538461538,110L837.8461538461538,118M829.8461538461538,118L837.8461538461538,110" stroke="#eb6834" stroke-width="2"/>
+<text x="14" y="264" font-size="12" font-weight="600" fill="#0b0b0b">owasp-java-classname</text>
+<text x="14" y="277" font-size="10" fill="#52514e">slope: safe 0.93 · native timeout</text>
+<line x1="54" x2="248" y1="390" y2="390" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="393" font-size="9" text-anchor="end" fill="#52514e">0.001ms</text>
+<line x1="54" x2="248" y1="374.85714285714283" y2="374.85714285714283" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="377.85714285714283" font-size="9" text-anchor="end" fill="#52514e">0.01ms</text>
+<line x1="54" x2="248" y1="359.7142857142857" y2="359.7142857142857" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="362.7142857142857" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="54" x2="248" y1="344.57142857142856" y2="344.57142857142856" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="347.57142857142856" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="54" x2="248" y1="329.42857142857144" y2="329.42857142857144" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="332.42857142857144" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="54" x2="248" y1="314.2857142857143" y2="314.2857142857143" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="317.2857142857143" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="54" x2="248" y1="299.14285714285717" y2="299.14285714285717" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="302.14285714285717" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="54" x2="248" y1="284" y2="284" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="287" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="54" y="403" font-size="9" text-anchor="middle" fill="#52514e">n=8</text>
+<text x="113.6923076923077" y="403" font-size="9" text-anchor="middle" fill="#52514e">n=128</text>
+<text x="248" y="403" font-size="9" text-anchor="middle" fill="#52514e">n=64k</text>
+<path d="M54.0,381.7L62.7,381.9L68.9,372.8L73.7,358.1L77.7,348.2L81.0,333.9L83.8,323.7" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M54.0,355.0L62.7,354.9L68.9,356.6L73.7,352.4L77.7,348.6L81.0,352.1L83.8,347.6L92.6,348.0L98.8,344.9L113.7,344.0L128.6,339.6L143.5,335.2L158.5,336.0L173.4,334.0L188.3,332.4L203.2,326.6L218.2,326.3L233.1,321.8L248.0,313.6" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M88.57559424153109,280L96.57559424153109,288M88.57559424153109,288L96.57559424153109,280" stroke="#eb6834" stroke-width="2"/>
+<text x="264" y="264" font-size="12" font-weight="600" fill="#0b0b0b">owasp-email</text>
+<text x="264" y="277" font-size="10" fill="#52514e">slope: safe 1.01 · native timeout</text>
+<line x1="304" x2="498" y1="390" y2="390" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="393" font-size="9" text-anchor="end" fill="#52514e">0.001ms</text>
+<line x1="304" x2="498" y1="374.85714285714283" y2="374.85714285714283" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="377.85714285714283" font-size="9" text-anchor="end" fill="#52514e">0.01ms</text>
+<line x1="304" x2="498" y1="359.7142857142857" y2="359.7142857142857" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="362.7142857142857" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="304" x2="498" y1="344.57142857142856" y2="344.57142857142856" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="347.57142857142856" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="304" x2="498" y1="329.42857142857144" y2="329.42857142857144" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="332.42857142857144" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="304" x2="498" y1="314.2857142857143" y2="314.2857142857143" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="317.2857142857143" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="304" x2="498" y1="299.14285714285717" y2="299.14285714285717" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="302.14285714285717" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="304" x2="498" y1="284" y2="284" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="287" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="304" y="403" font-size="9" text-anchor="middle" fill="#52514e">n=8</text>
+<text x="363.6923076923077" y="403" font-size="9" text-anchor="middle" fill="#52514e">n=128</text>
+<text x="498" y="403" font-size="9" text-anchor="middle" fill="#52514e">n=64k</text>
+<path d="M304.0,387.8L312.7,382.2L318.9,365.1L323.7,349.4L327.7,331.2L331.0,312.9L333.8,294.2" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M304.0,354.2L312.7,354.5L318.9,353.1L323.7,352.9L327.7,351.7L331.0,351.3L333.8,351.7L342.6,348.3L348.8,346.0L363.7,341.6L378.6,338.9L393.5,336.7L408.5,331.6L423.4,328.4L438.3,323.1L453.2,318.9L468.2,314.5L483.1,310.4L498.0,304.3" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M338.5755942415311,280L346.5755942415311,288M338.5755942415311,288L346.5755942415311,280" stroke="#eb6834" stroke-width="2"/>
+<text x="514" y="264" font-size="12" font-weight="600" fill="#0b0b0b">nested-star</text>
+<text x="514" y="277" font-size="10" fill="#52514e">slope: safe 1.04 · native timeout</text>
+<line x1="554" x2="748" y1="390" y2="390" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="393" font-size="9" text-anchor="end" fill="#52514e">0.001ms</text>
+<line x1="554" x2="748" y1="374.85714285714283" y2="374.85714285714283" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="377.85714285714283" font-size="9" text-anchor="end" fill="#52514e">0.01ms</text>
+<line x1="554" x2="748" y1="359.7142857142857" y2="359.7142857142857" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="362.7142857142857" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="554" x2="748" y1="344.57142857142856" y2="344.57142857142856" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="347.57142857142856" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="554" x2="748" y1="329.42857142857144" y2="329.42857142857144" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="332.42857142857144" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="554" x2="748" y1="314.2857142857143" y2="314.2857142857143" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="317.2857142857143" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="554" x2="748" y1="299.14285714285717" y2="299.14285714285717" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="302.14285714285717" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="554" x2="748" y1="284" y2="284" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="287" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="554" y="403" font-size="9" text-anchor="middle" fill="#52514e">n=8</text>
+<text x="613.6923076923077" y="403" font-size="9" text-anchor="middle" fill="#52514e">n=128</text>
+<text x="748" y="403" font-size="9" text-anchor="middle" fill="#52514e">n=64k</text>
+<path d="M554.0,375.2L562.7,358.8L568.9,340.0L573.7,321.2L577.7,304.0L581.0,286.8" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M554.0,355.9L562.7,354.8L568.9,351.6L573.7,352.8L577.7,350.1L581.0,352.9L583.8,349.2L592.6,349.0L598.8,348.6L613.7,344.2L628.6,338.7L643.5,337.2L658.5,334.6L673.4,337.5L688.3,338.6L703.2,333.9L718.2,329.4L733.1,325.2L748.0,319.2" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M579.8461538461538,280L587.8461538461538,288M579.8461538461538,288L587.8461538461538,280" stroke="#eb6834" stroke-width="2"/>
+<text x="764" y="264" font-size="12" font-weight="600" fill="#0b0b0b">cloudflare-2019</text>
+<text x="764" y="277" font-size="10" fill="#52514e">slope: safe 1.00 · native 2.00</text>
+<line x1="804" x2="998" y1="390" y2="390" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="393" font-size="9" text-anchor="end" fill="#52514e">0.01ms</text>
+<line x1="804" x2="998" y1="372.3333333333333" y2="372.3333333333333" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="375.3333333333333" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="804" x2="998" y1="354.6666666666667" y2="354.6666666666667" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="357.6666666666667" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="804" x2="998" y1="337" y2="337" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="340" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="804" x2="998" y1="319.33333333333337" y2="319.33333333333337" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="322.33333333333337" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="804" x2="998" y1="301.66666666666663" y2="301.66666666666663" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="304.66666666666663" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="804" x2="998" y1="284" y2="284" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="287" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="804" y="403" font-size="9" text-anchor="middle" fill="#52514e">n=256</text>
+<text x="911.7777777777777" y="403" font-size="9" text-anchor="middle" fill="#52514e">n=8k</text>
+<text x="998" y="403" font-size="9" text-anchor="middle" fill="#52514e">n=128k</text>
+<path d="M804.0,379.2L825.6,369.6L847.1,359.4L868.7,349.4L890.2,335.8L911.8,327.7L933.3,317.5L954.9,306.9L976.4,296.0L998.0,285.6" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M804.0,347.7L825.6,345.8L847.1,353.4L868.7,350.1L890.2,344.8L911.8,340.9L933.3,335.1L954.9,327.9L976.4,325.9L998.0,318.8" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<text x="14" y="434" font-size="12" font-weight="600" fill="#0b0b0b">stackoverflow-2016</text>
+<text x="14" y="447" font-size="10" fill="#52514e">slope: safe 0.87 · native 2.05</text>
+<line x1="54" x2="248" y1="560" y2="560" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="563" font-size="9" text-anchor="end" fill="#52514e">0.01ms</text>
+<line x1="54" x2="248" y1="542.3333333333334" y2="542.3333333333334" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="545.3333333333334" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="54" x2="248" y1="524.6666666666666" y2="524.6666666666666" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="527.6666666666666" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="54" x2="248" y1="507" y2="507" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="510" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="54" x2="248" y1="489.33333333333337" y2="489.33333333333337" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="492.33333333333337" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="54" x2="248" y1="471.66666666666663" y2="471.66666666666663" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="474.66666666666663" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="54" x2="248" y1="454" y2="454" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="457" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="54" y="573" font-size="9" text-anchor="middle" fill="#52514e">n=256</text>
+<text x="161.77777777777777" y="573" font-size="9" text-anchor="middle" fill="#52514e">n=8k</text>
+<text x="248" y="573" font-size="9" text-anchor="middle" fill="#52514e">n=128k</text>
+<path d="M54.0,549.0L75.6,541.3L97.1,530.8L118.7,515.9L140.2,510.1L161.8,498.9L183.3,489.8L204.9,474.9L226.4,465.4L248.0,456.6" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M54.0,522.8L75.6,524.1L97.1,517.7L118.7,513.3L140.2,519.6L161.8,515.0L183.3,514.4L204.9,509.4L226.4,499.8L248.0,499.2" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<text x="264" y="434" font-size="12" font-weight="600" fill="#0b0b0b">ms-CVE-2015-8315</text>
+<text x="264" y="447" font-size="10" fill="#52514e">slope: safe 0.98 · native timeout</text>
+<line x1="304" x2="498" y1="560" y2="560" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="563" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="304" x2="498" y1="538.8" y2="538.8" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="541.8" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="304" x2="498" y1="517.6" y2="517.6" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="520.6" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="304" x2="498" y1="496.4" y2="496.4" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="499.4" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="304" x2="498" y1="475.2" y2="475.2" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="478.2" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="304" x2="498" y1="454" y2="454" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="457" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="304" y="573" font-size="9" text-anchor="middle" fill="#52514e">n=256</text>
+<text x="411.77777777777777" y="573" font-size="9" text-anchor="middle" fill="#52514e">n=8k</text>
+<text x="498" y="573" font-size="9" text-anchor="middle" fill="#52514e">n=128k</text>
+<path d="M304.0,549.2L325.6,538.5L347.1,521.6L368.7,513.3L390.2,499.2L411.8,487.0L433.3,475.2L454.9,461.9" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M304.0,527.5L325.6,528.2L347.1,526.4L368.7,523.2L390.2,524.2L411.8,517.2L433.3,510.9L454.9,505.3L476.4,497.0L498.0,492.9" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M472.44444444444446,450L480.44444444444446,458M472.44444444444446,458L480.44444444444446,450" stroke="#eb6834" stroke-width="2"/>
+<text x="514" y="434" font-size="12" font-weight="600" fill="#0b0b0b">trim-CVE-2020-7753</text>
+<text x="514" y="447" font-size="10" fill="#52514e">slope: safe 0.84 · native 1.97</text>
+<line x1="554" x2="748" y1="560" y2="560" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="563" font-size="9" text-anchor="end" fill="#52514e">0.01ms</text>
+<line x1="554" x2="748" y1="542.3333333333334" y2="542.3333333333334" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="545.3333333333334" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="554" x2="748" y1="524.6666666666666" y2="524.6666666666666" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="527.6666666666666" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="554" x2="748" y1="507" y2="507" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="510" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="554" x2="748" y1="489.33333333333337" y2="489.33333333333337" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="492.33333333333337" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="554" x2="748" y1="471.66666666666663" y2="471.66666666666663" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="474.66666666666663" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="554" x2="748" y1="454" y2="454" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="457" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="554" y="573" font-size="9" text-anchor="middle" fill="#52514e">n=256</text>
+<text x="661.7777777777777" y="573" font-size="9" text-anchor="middle" fill="#52514e">n=8k</text>
+<text x="748" y="573" font-size="9" text-anchor="middle" fill="#52514e">n=128k</text>
+<path d="M554.0,548.2L575.6,542.3L597.1,532.3L618.7,517.8L640.2,510.1L661.8,501.3L683.3,488.9L704.9,477.5L726.4,467.0L748.0,457.5" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M554.0,527.2L575.6,524.7L597.1,518.2L618.7,516.2L640.2,523.3L661.8,518.6L683.3,513.7L704.9,510.8L726.4,505.5L748.0,500.4" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<text x="764" y="434" font-size="12" font-weight="600" fill="#0b0b0b">ansi-regex-CVE-2021-3807</text>
+<text x="764" y="447" font-size="10" fill="#52514e">slope: safe 0.93 · native timeout</text>
+<line x1="804" x2="998" y1="560" y2="560" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="563" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="804" x2="998" y1="538.8" y2="538.8" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="541.8" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="804" x2="998" y1="517.6" y2="517.6" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="520.6" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="804" x2="998" y1="496.4" y2="496.4" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="499.4" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="804" x2="998" y1="475.2" y2="475.2" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="478.2" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="804" x2="998" y1="454" y2="454" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="457" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="804" y="573" font-size="9" text-anchor="middle" fill="#52514e">n=256</text>
+<text x="911.7777777777777" y="573" font-size="9" text-anchor="middle" fill="#52514e">n=8k</text>
+<text x="998" y="573" font-size="9" text-anchor="middle" fill="#52514e">n=128k</text>
+<path d="M804.0,549.7L825.6,546.3L847.1,523.1L868.7,510.8L890.2,505.9L911.8,493.0L933.3,479.3L954.9,464.2" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M804.0,533.2L825.6,528.4L847.1,531.1L868.7,532.2L890.2,527.4L911.8,523.6L933.3,516.0L954.9,513.1L976.4,505.6L998.0,499.2" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M972.4444444444445,450L980.4444444444445,458M972.4444444444445,458L980.4444444444445,450" stroke="#eb6834" stroke-width="2"/>
+<text x="14" y="604" font-size="12" font-weight="600" fill="#0b0b0b">color-string-CVE-2021-29060</text>
+<text x="14" y="617" font-size="10" fill="#52514e">slope: safe 1.05 · native 2.00</text>
+<line x1="54" x2="248" y1="730" y2="730" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="733" font-size="9" text-anchor="end" fill="#52514e">0.01ms</text>
+<line x1="54" x2="248" y1="712.3333333333334" y2="712.3333333333334" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="715.3333333333334" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="54" x2="248" y1="694.6666666666666" y2="694.6666666666666" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="697.6666666666666" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="54" x2="248" y1="677" y2="677" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="680" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="54" x2="248" y1="659.3333333333334" y2="659.3333333333334" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="662.3333333333334" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="54" x2="248" y1="641.6666666666666" y2="641.6666666666666" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="644.6666666666666" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="54" x2="248" y1="624" y2="624" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="627" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="54" y="743" font-size="9" text-anchor="middle" fill="#52514e">n=256</text>
+<text x="161.77777777777777" y="743" font-size="9" text-anchor="middle" fill="#52514e">n=8k</text>
+<text x="248" y="743" font-size="9" text-anchor="middle" fill="#52514e">n=128k</text>
+<path d="M54.0,717.7L75.6,710.8L97.1,699.1L118.7,688.7L140.2,679.2L161.8,671.3L183.3,658.1L204.9,648.0L226.4,637.0L248.0,626.2" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M54.0,690.2L75.6,687.4L97.1,684.0L118.7,694.0L140.2,688.6L161.8,683.9L183.3,680.0L204.9,674.3L226.4,670.0L248.0,661.0" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<text x="264" y="604" font-size="12" font-weight="600" fill="#0b0b0b">glob-parent-CVE-2020-28469</text>
+<text x="264" y="617" font-size="10" fill="#52514e">slope: safe 1.09 · native timeout</text>
+<line x1="304" x2="498" y1="730" y2="730" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="733" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="304" x2="498" y1="703.5" y2="703.5" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="706.5" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="304" x2="498" y1="677" y2="677" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="680" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="304" x2="498" y1="650.5" y2="650.5" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="653.5" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="304" x2="498" y1="624" y2="624" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="627" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="304" y="743" font-size="9" text-anchor="middle" fill="#52514e">n=256</text>
+<text x="411.77777777777777" y="743" font-size="9" text-anchor="middle" fill="#52514e">n=8k</text>
+<text x="498" y="743" font-size="9" text-anchor="middle" fill="#52514e">n=128k</text>
+<path d="M304.0,711.9L325.6,689.5L347.1,667.4L368.7,645.3" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M304.0,727.5L325.6,718.8L347.1,722.8L368.7,727.7L390.2,726.7L411.8,720.5L433.3,709.4L454.9,700.5L476.4,698.3L498.0,682.6" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M386.2222222222222,620L394.2222222222222,628M386.2222222222222,628L394.2222222222222,620" stroke="#eb6834" stroke-width="2"/>
+<text x="514" y="604" font-size="12" font-weight="600" fill="#0b0b0b">semver-CVE-2022-25883</text>
+<text x="514" y="617" font-size="10" fill="#52514e">slope: safe 1.00 · native 1.95</text>
+<line x1="554" x2="748" y1="730" y2="730" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="733" font-size="9" text-anchor="end" fill="#52514e">0.01ms</text>
+<line x1="554" x2="748" y1="712.3333333333334" y2="712.3333333333334" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="715.3333333333334" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="554" x2="748" y1="694.6666666666666" y2="694.6666666666666" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="697.6666666666666" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="554" x2="748" y1="677" y2="677" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="680" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="554" x2="748" y1="659.3333333333334" y2="659.3333333333334" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="662.3333333333334" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="554" x2="748" y1="641.6666666666666" y2="641.6666666666666" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="644.6666666666666" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="554" x2="748" y1="624" y2="624" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="627" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="554" y="743" font-size="9" text-anchor="middle" fill="#52514e">n=256</text>
+<text x="661.7777777777777" y="743" font-size="9" text-anchor="middle" fill="#52514e">n=8k</text>
+<text x="748" y="743" font-size="9" text-anchor="middle" fill="#52514e">n=128k</text>
+<path d="M554.0,716.9L575.6,707.1L597.1,700.5L618.7,692.2L640.2,679.7L661.8,666.6L683.3,656.8L704.9,646.7L726.4,634.8L748.0,626.3" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M554.0,694.0L575.6,693.1L597.1,687.4L618.7,685.5L640.2,691.9L661.8,684.8L683.3,684.8L704.9,680.9L726.4,671.5L748.0,664.9" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<text x="764" y="604" font-size="12" font-weight="600" fill="#0b0b0b">cross-spawn-CVE-2024-21538</text>
+<text x="764" y="617" font-size="10" fill="#52514e">slope: safe 0.82 · native 1.96</text>
+<line x1="804" x2="998" y1="730" y2="730" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="733" font-size="9" text-anchor="end" fill="#52514e">0.01ms</text>
+<line x1="804" x2="998" y1="712.3333333333334" y2="712.3333333333334" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="715.3333333333334" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="804" x2="998" y1="694.6666666666666" y2="694.6666666666666" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="697.6666666666666" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="804" x2="998" y1="677" y2="677" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="680" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="804" x2="998" y1="659.3333333333334" y2="659.3333333333334" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="662.3333333333334" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="804" x2="998" y1="641.6666666666666" y2="641.6666666666666" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="644.6666666666666" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="804" x2="998" y1="624" y2="624" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="627" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="804" y="743" font-size="9" text-anchor="middle" fill="#52514e">n=256</text>
+<text x="911.7777777777777" y="743" font-size="9" text-anchor="middle" fill="#52514e">n=8k</text>
+<text x="998" y="743" font-size="9" text-anchor="middle" fill="#52514e">n=128k</text>
+<path d="M804.0,717.6L825.6,705.9L847.1,695.8L868.7,686.2L890.2,677.4L911.8,666.9L933.3,658.1L954.9,644.3L976.4,636.7L998.0,625.9" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M804.0,697.5L825.6,690.4L847.1,686.3L868.7,685.8L890.2,687.4L911.8,686.9L933.3,681.8L954.9,678.9L976.4,674.3L998.0,668.7" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<text x="14" y="774" font-size="12" font-weight="600" fill="#0b0b0b">nth-check-CVE-2021-3803</text>
+<text x="14" y="787" font-size="10" fill="#52514e">slope: safe 1.01 · native 1.91</text>
+<line x1="54" x2="248" y1="900" y2="900" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="903" font-size="9" text-anchor="end" fill="#52514e">0.01ms</text>
+<line x1="54" x2="248" y1="882.3333333333334" y2="882.3333333333334" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="885.3333333333334" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="54" x2="248" y1="864.6666666666666" y2="864.6666666666666" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="867.6666666666666" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="54" x2="248" y1="847" y2="847" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="850" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="54" x2="248" y1="829.3333333333334" y2="829.3333333333334" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="832.3333333333334" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="54" x2="248" y1="811.6666666666666" y2="811.6666666666666" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="814.6666666666666" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="54" x2="248" y1="794" y2="794" stroke="#e4e3df" stroke-width="1"/>
+<text x="50" y="797" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="54" y="913" font-size="9" text-anchor="middle" fill="#52514e">n=256</text>
+<text x="161.77777777777777" y="913" font-size="9" text-anchor="middle" fill="#52514e">n=8k</text>
+<text x="248" y="913" font-size="9" text-anchor="middle" fill="#52514e">n=128k</text>
+<path d="M54.0,887.5L75.6,878.6L97.1,870.7L118.7,856.7L140.2,846.4L161.8,838.6L183.3,825.5L204.9,817.3L226.4,806.7L248.0,795.2" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M54.0,860.3L75.6,856.8L97.1,853.6L118.7,849.5L140.2,853.8L161.8,850.9L183.3,845.0L204.9,840.3L226.4,833.3L248.0,829.7" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<text x="264" y="774" font-size="12" font-weight="600" fill="#0b0b0b">normalize-url-CVE-2021-33502</text>
+<text x="264" y="787" font-size="10" fill="#52514e">slope: safe 0.72 · native timeout</text>
+<line x1="304" x2="498" y1="900" y2="900" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="903" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="304" x2="498" y1="878.8" y2="878.8" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="881.8" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="304" x2="498" y1="857.6" y2="857.6" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="860.6" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="304" x2="498" y1="836.4" y2="836.4" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="839.4" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="304" x2="498" y1="815.2" y2="815.2" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="818.2" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="304" x2="498" y1="794" y2="794" stroke="#e4e3df" stroke-width="1"/>
+<text x="300" y="797" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="304" y="913" font-size="9" text-anchor="middle" fill="#52514e">n=256</text>
+<text x="411.77777777777777" y="913" font-size="9" text-anchor="middle" fill="#52514e">n=8k</text>
+<text x="498" y="913" font-size="9" text-anchor="middle" fill="#52514e">n=128k</text>
+<path d="M304.0,895.2L325.6,889.1L347.1,875.6L368.7,859.1L390.2,845.2L411.8,836.5L433.3,819.8L454.9,812.1L476.4,798.1" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M304.0,872.1L325.6,868.1L347.1,865.7L368.7,871.7L390.2,863.3L411.8,858.8L433.3,853.3L454.9,848.0L476.4,845.4L498.0,839.8" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<path d="M494,790L502,798M494,798L502,790" stroke="#eb6834" stroke-width="2"/>
+<text x="514" y="774" font-size="12" font-weight="600" fill="#0b0b0b">http-cache-semantics-CVE-2022-25881</text>
+<text x="514" y="787" font-size="10" fill="#52514e">slope: safe 0.84 · native 2.17</text>
+<line x1="554" x2="748" y1="900" y2="900" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="903" font-size="9" text-anchor="end" fill="#52514e">0.01ms</text>
+<line x1="554" x2="748" y1="882.3333333333334" y2="882.3333333333334" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="885.3333333333334" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="554" x2="748" y1="864.6666666666666" y2="864.6666666666666" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="867.6666666666666" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="554" x2="748" y1="847" y2="847" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="850" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="554" x2="748" y1="829.3333333333334" y2="829.3333333333334" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="832.3333333333334" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="554" x2="748" y1="811.6666666666666" y2="811.6666666666666" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="814.6666666666666" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="554" x2="748" y1="794" y2="794" stroke="#e4e3df" stroke-width="1"/>
+<text x="550" y="797" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="554" y="913" font-size="9" text-anchor="middle" fill="#52514e">n=256</text>
+<text x="661.7777777777777" y="913" font-size="9" text-anchor="middle" fill="#52514e">n=8k</text>
+<text x="748" y="913" font-size="9" text-anchor="middle" fill="#52514e">n=128k</text>
+<path d="M554.0,890.4L575.6,880.3L597.1,868.6L618.7,860.2L640.2,848.2L661.8,836.6L683.3,829.0L704.9,818.3L726.4,803.6L748.0,795.3" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M554.0,868.4L575.6,863.3L597.1,859.2L618.7,856.7L640.2,865.9L661.8,858.6L683.3,856.3L704.9,852.4L726.4,847.0L748.0,840.9" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+<text x="764" y="774" font-size="12" font-weight="600" fill="#0b0b0b">path-to-regexp-CVE-2024-45296</text>
+<text x="764" y="787" font-size="10" fill="#52514e">slope: safe 0.74 · native 2.09</text>
+<line x1="804" x2="998" y1="900" y2="900" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="903" font-size="9" text-anchor="end" fill="#52514e">0.01ms</text>
+<line x1="804" x2="998" y1="882.3333333333334" y2="882.3333333333334" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="885.3333333333334" font-size="9" text-anchor="end" fill="#52514e">0.1ms</text>
+<line x1="804" x2="998" y1="864.6666666666666" y2="864.6666666666666" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="867.6666666666666" font-size="9" text-anchor="end" fill="#52514e">1ms</text>
+<line x1="804" x2="998" y1="847" y2="847" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="850" font-size="9" text-anchor="end" fill="#52514e">10ms</text>
+<line x1="804" x2="998" y1="829.3333333333334" y2="829.3333333333334" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="832.3333333333334" font-size="9" text-anchor="end" fill="#52514e">100ms</text>
+<line x1="804" x2="998" y1="811.6666666666666" y2="811.6666666666666" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="814.6666666666666" font-size="9" text-anchor="end" fill="#52514e">1s</text>
+<line x1="804" x2="998" y1="794" y2="794" stroke="#e4e3df" stroke-width="1"/>
+<text x="800" y="797" font-size="9" text-anchor="end" fill="#52514e">10s</text>
+<text x="804" y="913" font-size="9" text-anchor="middle" fill="#52514e">n=256</text>
+<text x="911.7777777777777" y="913" font-size="9" text-anchor="middle" fill="#52514e">n=8k</text>
+<text x="998" y="913" font-size="9" text-anchor="middle" fill="#52514e">n=128k</text>
+<path d="M804.0,891.6L825.6,876.1L847.1,865.5L868.7,860.5L890.2,849.6L911.8,837.2L933.3,828.8L954.9,818.1L976.4,805.4L998.0,796.1" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/>
+<path d="M804.0,860.6L825.6,857.0L847.1,855.9L868.7,860.4L890.2,854.3L911.8,849.0L933.3,844.6L954.9,844.5L976.4,837.5L998.0,832.8" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+</svg>

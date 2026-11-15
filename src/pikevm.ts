@@ -34,6 +34,13 @@ function isWordChar(c: number, iu: boolean): boolean {
   );
 }
 
+/** True if input[i] is the trail half of a surrogate pair. */
+function isTrailAt(s: string, i: number): boolean {
+  const c = s.charCodeAt(i);
+  const p = s.charCodeAt(i - 1);
+  return c >= 0xdc00 && c <= 0xdfff && p >= 0xd800 && p <= 0xdbff;
+}
+
 class ThreadList {
   pcs: Int32Array;
   caps: Int32Array[];
@@ -51,6 +58,8 @@ export class PikeVM {
   private nlist: ThreadList;
   private readonly stackPc: number[] = [];
   private readonly stackCaps: Int32Array[] = [];
+  /** 1 if the caps array on the stack is owned by that path alone (may be mutated in place). */
+  private readonly stackOwned: number[] = [];
   private input = '';
   private readonly iu: boolean;
 
@@ -77,7 +86,7 @@ export class PikeVM {
   }
 
   /** Adds the thread (pc, caps) and everything reachable from it by epsilon moves at pos. */
-  private addThread(list: ThreadList, pc0: number, caps0: Int32Array, pos: number): void {
+  private addThread(list: ThreadList, pc0: number, caps0: Int32Array, pos: number, owned0 = false): void {
     const prog = this.prog;
     const ops = prog.ops;
     const arg1 = prog.arg1;
@@ -88,11 +97,14 @@ export class PikeVM {
     const gen = this.gen;
     const sp = this.stackPc;
     const sc = this.stackCaps;
+    const so = this.stackOwned;
     sp.push(pc0);
     sc.push(caps0);
+    so.push(owned0 ? 1 : 0);
     while (sp.length > 0) {
       const pc = sp.pop()!;
       const caps = sc.pop()!;
+      const owned = so.pop()!;
       // De-duplication key: (pc, freshness).
       let key = keyOffset[pc]!;
       const st = loopStacks[pc]!;
@@ -106,36 +118,50 @@ export class PikeVM {
         case JMP:
           sp.push(arg1[pc]!);
           sc.push(caps);
+          so.push(owned);
           break;
         case SPLIT:
+          // Both branches now share the array: neither may mutate it.
           sp.push(arg2[pc]!, arg1[pc]!);
           sc.push(caps, caps);
+          so.push(0, 0);
           break;
         case SAVE:
         case LOOPSET: {
-          const c = caps.slice();
-          c[arg1[pc]!] = pos;
+          const slot = arg1[pc]!;
+          if (caps[slot] === pos) {
+            sp.push(pc + 1);
+            sc.push(caps);
+            so.push(owned);
+            break;
+          }
+          const c = owned ? caps : caps.slice();
+          c[slot] = pos;
           sp.push(pc + 1);
           sc.push(c);
+          so.push(1);
           break;
         }
         case CLEAR: {
-          const c = caps.slice();
+          const c = owned ? caps : caps.slice();
           c.fill(-1, arg1[pc]!, arg2[pc]!);
           sp.push(pc + 1);
           sc.push(c);
+          so.push(1);
           break;
         }
         case LOOPCHECK:
           if (caps[arg1[pc]!] !== pos) {
             sp.push(pc + 1);
             sc.push(caps);
+            so.push(owned);
           }
           break;
         case ASSERT:
           if (this.assert(arg1[pc]!, pos)) {
             sp.push(pc + 1);
             sc.push(caps);
+            so.push(owned);
           }
           break;
         default: // CHAR, SET, MATCH: wait in the list for the next step
@@ -167,6 +193,7 @@ export class PikeVM {
     const matchers = prog.matchers;
     const unicode = prog.flags.unicode;
     const first = prog.firstChars;
+    const prefix = prog.literalPrefix;
     const len = input.length;
     this.input = input;
     let clist = this.clist;
@@ -182,7 +209,13 @@ export class PikeVM {
 
     while (true) {
       if (matched === null && (pos === start || !sticky)) {
-        if (clist.size === 0 && first !== null) {
+        if (clist.size === 0 && prefix !== '' && !sticky) {
+          // Nothing running: jump straight to the next occurrence of the literal prefix.
+          let at = input.indexOf(prefix, pos);
+          while (unicode && at > 0 && at < len && isTrailAt(input, at)) at = input.indexOf(prefix, at + 1);
+          if (at < 0) return null;
+          pos = at;
+        } else if (clist.size === 0 && first !== null) {
           // Nothing running: skip ahead to the next position where a match could begin.
           while (pos < len) {
             let c = input.charCodeAt(pos);
@@ -201,8 +234,10 @@ export class PikeVM {
           if (pos >= len) return null;
         }
         if (clist.size === 0) this.gen++; // fresh visited marks for a fresh start position
+        // pc 0 is always SAVE 0: start at pc 1 with slot 0 already set (saves one copy).
         const caps0 = new Int32Array(prog.slotCount).fill(-1);
-        this.addThread(clist, 0, caps0, pos);
+        caps0[0] = pos;
+        this.addThread(clist, 1, caps0, pos, true);
       }
       if (clist.size === 0) {
         // No live threads: done if we already matched, are sticky, or ran out of input;

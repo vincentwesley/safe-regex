@@ -338,7 +338,7 @@ function analyzeNfa(
         (found.suffix ? ` (for example on ${JSON.stringify(found.suffix)})` : '') +
         `, a backtracking engine tries every one of them before giving up: time grows like 2^n.`,
       culprits: [culprit],
-      attack: { prefix, pump, suffix: found.suffix },
+      attack: { prefix: found.prefix, pump, suffix: found.suffix },
       validated: found.validated,
     };
   }
@@ -444,7 +444,7 @@ function analyzeNfa(
     const fromRetry = link.p === nfa.retry;
     const cq = snippetFor(comps[comp[link.q]!]!);
     const cp = fromRetry ? null : snippetFor(comps[bestA]!);
-    const found = findSuffix(pattern, flags, prefix, pump, sets);
+    const found = findSuffix(pattern, flags, prefix, pump, sets, fromRetry);
     const shown = JSON.stringify(pump);
     const big = degree === 2 ? 'quadratic' : degree === 3 ? 'cubic' : `degree ${degree}`;
     const explanation = fromRetry
@@ -461,7 +461,7 @@ function analyzeNfa(
       summary: `Polynomial (${big}) backtracking in ${fromRetry ? cq.text : `${cp!.text} … ${cq.text}`}`,
       explanation,
       culprits: fromRetry ? [cq] : [cp!, cq],
-      attack: { prefix, pump, suffix: found.suffix },
+      attack: { prefix: found.prefix, pump, suffix: found.suffix },
       validated: found.validated,
     };
   }
@@ -474,28 +474,49 @@ function analyzeNfa(
 }
 
 /** Finds a suffix that makes prefix + pump×k + suffix fail to match, verified with SafeRegExp. */
-function findSuffix(pattern: string, flags: string, prefix: string, pump: string, sets: CharSet[]): { suffix: string; validated: boolean } {
+function findSuffix(
+  pattern: string,
+  flags: string,
+  prefix: string,
+  pump: string,
+  sets: CharSet[],
+  tryPrefixes = false,
+): { prefix: string; suffix: string; validated: boolean } {
   const plain = [...flags].filter((c) => c !== 'g' && c !== 'y' && c !== 'd').join('');
   const anywhere = new SafeRegExp(pattern, plain);
   const atStart = new SafeRegExp(pattern, plain + 'y');
   const max = flags.includes('u') ? 0x10ffff : 0xffff;
   const all = union(...sets);
-  const candidates = ['', '!', '\n', '\u0000', ' ', '=', '"', '/', 'a', '0', 'A', '_', '-', '￿'];
+  const singles = ['!', '\n', '\u0000', ' ', '=', '"', '/', 'a', '0', 'A', '_', '-', '\uffff'];
   // A character no state can consume is a sure way to make the run fail.
   for (let i = 0, next = 0; i <= all.length; i += 2) {
     const lo = i < all.length ? all[i]! : max + 1;
-    if (lo > next && next >= 0x20 && next < 0x7f) { candidates.splice(1, 0, String.fromCharCode(next)); break; }
+    if (lo > next && next >= 0x20 && next < 0x7f) { singles.unshift(String.fromCharCode(next)); break; }
     if (i < all.length) next = all[i + 1]! + 1;
   }
-  for (const k of [16, 17]) {
-    for (const s of candidates) {
-      const str = prefix + pump.repeat(k) + s;
-      if (anywhere.exec(str) === null) return { suffix: s, validated: true };
+  const suffixes = ['', ...singles];
+  for (const a of singles) for (const b of singles) suffixes.push(a + b);
+  const prefixes = tryPrefixes ? [prefix, ...singles.map((c) => prefix + c)] : [prefix];
+  // Best: the whole search fails, so the engine also retries every start position.
+  // With the g flag (replace/split/matchAll loops), it is enough that no match starts inside the
+  // pumped region: the loop then searches from every position in it.
+  const global = flags.includes('g') ? new SafeRegExp(pattern, plain + 'g') : null;
+  const fails = (pre: string, k: number, suf: string): boolean => {
+    const str = pre + pump.repeat(k) + suf;
+    if (!global) return anywhere.exec(str) === null;
+    global.lastIndex = pre.length;
+    const m = global.exec(str);
+    return m === null || m.index >= pre.length + pump.length * k;
+  };
+  for (const pre of prefixes) {
+    for (const suf of suffixes) {
+      if (fails(pre, 16, suf) && fails(pre, 17, suf)) return { prefix: pre, suffix: suf, validated: true };
     }
   }
-  for (const s of candidates) {
-    const str = prefix + pump.repeat(16) + s;
-    if (atStart.exec(str) === null) return { suffix: s, validated: true };
+  // Enough for exponential blow-up: the match attempt at position 0 fails.
+  for (const suf of suffixes) {
+    atStart.lastIndex = 0;
+    if (atStart.exec(prefix + pump.repeat(16) + suf) === null) return { prefix, suffix: suf, validated: true };
   }
-  return { suffix: '!', validated: false };
+  return { prefix, suffix: '!', validated: false };
 }
