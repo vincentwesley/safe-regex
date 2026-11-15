@@ -15,7 +15,7 @@ Status file for resuming work in a new session.
 * M3: 20-entry ReDoS corpus and benchmark; linear `split` (D16).
 * M4: ReDoS checker `analyze()`.
 * M5: playground, smoke-tested in headless Chromium.
-* M6: docs, performance pass, acceptance script, fresh-clone run, pull request.
+* M6: docs, performance pass, acceptance script, fresh-clone run, pull request #1 merged into `main` with CI green on Node 20/22/24 + fuzz + benchmark jobs.
 
 ## Done and verified
 * **Acceptance: 13/13 checks pass from a fresh clone** of the branch (`npm ci && node scripts/acceptance.mjs`, 2026-11-15).
@@ -38,8 +38,7 @@ Status file for resuming work in a new session.
 
 ## What needs Vin
 See `docs/NEEDS-VIN.md` for exact steps:
-1. Tag/release `v1.0.0` if the tag isn't on GitHub (this session may not be allowed to push tags).
-2. Merge the pull request if it is still open.
-3. Enable private vulnerability reporting (referenced by SECURITY.md).
-4. Optional: GitHub Pages for the playground (workflow provided).
-5. Optional: npm publish.
+1. **Tag/release `v1.0.0`** on `main`. The work is merged (vincentwesley/safe-regex#1, merge commit `a6715bf`, CI green), but pushing the tag from this session was refused: its git access only covers the working branch. Until the tag exists, install with `npm install github:vincentwesley/safe-regex` (without `#v1.0.0`).
+2. Enable private vulnerability reporting (referenced by SECURITY.md).
+3. Optional: GitHub Pages for the playground (workflow provided).
+4. Optional: npm publish.

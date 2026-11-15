@@ -44,7 +44,7 @@ The package is installed straight from GitHub (it is not on npm):
 npm install github:vincentwesley/safe-regex#v1.0.0
 ```
 
-npm clones the tag and runs the `prepare` script, which builds `dist/`. The package name is `@vincentwesley/safe-regex` (the unscoped `safe-regex` on npm is an unrelated ReDoS *detector*). ES modules and CommonJS are both provided, with TypeScript types.
+(If the `v1.0.0` tag isn't visible on GitHub yet, drop `#v1.0.0` to install from `main`.) npm clones the repository and runs the `prepare` script, which builds `dist/`. The package name is `@vincentwesley/safe-regex` (the unscoped `safe-regex` on npm is an unrelated ReDoS *detector*). ES modules and CommonJS are both provided, with TypeScript types.
 
 ```js
 import { SafeRegExp } from '@vincentwesley/safe-regex';      // ESM
