@@ -12,7 +12,7 @@ const CASES = [
   ['emails', '[\\w.+-]+@[\\w-]+\\.[\\w.]+', 'g'],
   ['IPv4', '\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b', 'g'],
   ['words, case-insensitive', '\\bLOREM\\b', 'gi'],
-  ['line trim', '^\\s+|\\s+$', 'gm'],
+  ['last word of each line', '\\w+$', 'gm'],
 ];
 
 function time(fn) {

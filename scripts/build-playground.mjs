@@ -15,7 +15,7 @@ await build({
   entryPoints: ['playground/app.js', 'playground/race-worker.js'],
   bundle: true,
   format: 'esm',
-  target: 'es2020',
+  target: 'es2022',
   outdir: out,
   minify: true,
   sourcemap: false,

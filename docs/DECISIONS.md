@@ -62,3 +62,6 @@ Profiling showed thread bookkeeping dominating. Added: literal-prefix skip with 
 
 ### D19. Global iteration bound stated honestly
 Each `exec` is O(n·m). A `g` loop runs `exec` once per match, and a Pike VM must keep running past a found match while higher-priority threads live, so an adversarial pattern/input can make the *loop* O(n²·m). Rust's `regex` documents the same bound for its iterators. Documented in README and SECURITY.md rather than claimed away.
+
+### D20. Compile target ES2022
+The first build targeted ES2020, which makes TypeScript rewrite private `#fields` into WeakMap lookups on every access (visible in the profiler). ES2022 is supported by Node ≥ 16.9 and all evergreen browsers, and the package already requires Node ≥ 20, so the target is ES2022.

@@ -12,7 +12,7 @@ const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 function check(id, name, fn) {
   const t = Date.now();
   let ok = false;
-  let detail = '';
+  let detail;
   try {
     const r = fn();
     ok = r === true || (r && r.ok);

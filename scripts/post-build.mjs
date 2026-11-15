@@ -7,7 +7,7 @@ await build({
   bundle: true,
   format: 'cjs',
   platform: 'neutral',
-  target: 'es2020',
+  target: 'es2022',
   outfile: 'dist/cjs/index.js',
   logLevel: 'warning',
 });

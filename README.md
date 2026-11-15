@@ -153,7 +153,7 @@ Two speed-ups skip positions where no match can start: a literal-prefix `indexOf
 
 ## Correctness: differential fuzzing
 
-`scripts/fuzz.mjs` generates random patterns from the supported grammar (plus 8% random "syntax soup" to compare error handling), random flags from `dgimsuy`, and inputs drawn from each pattern's own alphabet plus tricky characters (case-folding pairs like `ſ`/`s`/`K`/`K`, `İ`, `ς`/`σ`, surrogate pairs and lone surrogates, line terminators). For every input it compares SafeRegExp with V8 on `exec` (with a random `lastIndex`), repeated `exec`, `replace` (template and function), `split`, `search`, `match` and `matchAll`: the matched text, index, every capture, `groups`, `indices` and the resulting `lastIndex`. Construction is compared too: a pattern must be rejected by both or by neither.
+`scripts/fuzz.mjs` generates random patterns from the supported grammar (plus 8% random "syntax soup" to compare error handling), random flags from `dgimsuy`, and inputs drawn from each pattern's own alphabet plus tricky characters (case-folding pairs like `ſ`/`s` and `K`/`K` (U+212A Kelvin sign), `İ`, `ς`/`σ`, surrogate pairs and lone surrogates, line terminators). For every input it compares SafeRegExp with V8 on `exec` (with a random `lastIndex`), repeated `exec`, `replace` (template and function), `split`, `search`, `match` and `matchAll`: the matched text, index, every capture, `groups`, `indices` and the resulting `lastIndex`. Construction is compared too: a pattern must be rejected by both or by neither.
 
 <!-- FUZZ:start -->
 | | |
@@ -186,7 +186,7 @@ CI runs 100 000 patterns with a new seed on every push and publishes the counts 
 
 ![ReDoS benchmark: SafeRegExp stays linear while the built-in engine blows up](bench/results/redos-benchmark.svg)
 
-The corpus (`bench/corpus.mjs`) holds 20 patterns: the OWASP "evil regex" examples, the regexes behind the Cloudflare (2019) and Stack Overflow (2016) outages, and vulnerable regexes from 12 npm advisories (`ms`, `trim`, `ansi-regex`, `color-string`, `glob-parent`, `semver`, `cross-spawn`, `nth-check`, `normalize-url`, `http-cache-semantics`, `path-to-regexp`), each copied from the vulnerable package version and checked against its fix ([sources](docs/RESEARCH.md#3-redos-advisories-used-in-the-benchmark-corpus)). Each has an attack-string generator.
+The corpus (`bench/corpus.mjs`) holds 20 patterns: the OWASP "evil regex" examples and Russ Cox's `(a*)*b`, the regexes behind the Cloudflare (2019) and Stack Overflow (2016) outages, and vulnerable regexes from 11 npm advisories (`ms`, `trim`, `ansi-regex`, `color-string`, `glob-parent`, `semver`, `cross-spawn`, `nth-check`, `normalize-url`, `http-cache-semantics`, `path-to-regexp`), each copied from the vulnerable package version and checked against its fix ([sources](docs/RESEARCH.md#3-redos-advisories-used-in-the-benchmark-corpus)). Each has an attack-string generator.
 
 <!-- BENCH:start -->
 | Pattern | Class | Built-in RegExp: growth exponent | SafeRegExp: growth exponent | SafeRegExp at the largest input |
@@ -222,7 +222,7 @@ Measured 2026-11-15 on Intel(R) Xeon(R) Processor @ 2.10GHz (linux x64), v22.23.
 
 ```bash
 npm run build:lib
-node bench/run.mjs           # full run (≈ 15 min), rewrites bench/results/
+node bench/run.mjs           # full run (≈ 10 min), rewrites bench/results/
 node bench/run.mjs --quick   # 2 s budget, 3 reps (≈ 4 min; what CI runs)
 ```
 
@@ -233,17 +233,17 @@ Linear doesn't mean fast. V8's backtracking engine is JIT-compiled to machine co
 <!-- THROUGHPUT:start -->
 | workload | built-in RegExp | SafeRegExp | ratio |
 |---|---|---|---|
-| literal search (8547 matches) | 0.3 ms | 11.9 ms | 41× |
-| ISO dates (8547 matches) | 0.6 ms | 29.2 ms | 47× |
-| emails (8547 matches) | 8.9 ms | 189.6 ms | 21× |
-| IPv4 (8547 matches) | 1.3 ms | 34.6 ms | 26× |
-| words, case-insensitive (8548 matches) | 0.4 ms | 14.3 ms | 33× |
-| line trim (1 matches) | 1.2 ms | 31.1 ms | 26× |
+| literal search (8547 matches) | 0.3 ms | 15.2 ms | 52× |
+| ISO dates (8547 matches) | 0.9 ms | 34.3 ms | 38× |
+| emails (8547 matches) | 9.1 ms | 183.2 ms | 20× |
+| IPv4 (8547 matches) | 1.3 ms | 35.5 ms | 27× |
+| words, case-insensitive (8548 matches) | 0.4 ms | 12.2 ms | 29× |
+| last word of each line (9862 matches) | 14.9 ms | 173.4 ms | 12× |
 
 Built-in vs SafeRegExp on v22.23.4, best of 5 runs after one warm-up (`bench/throughput.mjs`).
 <!-- THROUGHPUT:end -->
 
-So SafeRegExp costs roughly 20–60× on benign input and wins by orders of magnitude on hostile input. Use it where the pattern **or** the input is untrusted, or where a regex on a request path must never be able to stall the event loop; keep the built-in engine for hot loops over trusted data. A lazy DFA (as in RE2 and Rust's `regex`) would close much of the gap and is the obvious next step.
+So SafeRegExp costs roughly 10–50× on benign input and wins by orders of magnitude on hostile input. Use it where the pattern **or** the input is untrusted, or where a regex on a request path must never be able to stall the event loop; keep the built-in engine for hot loops over trusted data. A lazy DFA (as in RE2 and Rust's `regex`) would close much of the gap and is the obvious next step.
 
 ## ReDoS checker
 
@@ -265,7 +265,7 @@ analyze('^\\d{3}-\\d{4}$').status;               // 'safe'
 
 It builds the ε-free automaton a backtracking engine explores (with the implicit "retry at every position" of an unanchored search), then looks for **ambiguity** (Weideman, van der Merwe, Berglund & Watson, CIAA 2016): a state that can return to itself on the same word along two different paths means exponential time; a chain of *k*−1 pairs of loops that can share a word means O(n^k). Every finding comes with an attack string that is **validated** by running it through SafeRegExp to confirm the match fails (which is what forces the backtracker to try every path). It flags all 20 corpus entries with the right class (7 exponential, 13 polynomial) and none of the 20 safe patterns in `test/fixtures/safe-patterns.json`.
 
-Limits: it ignores assertions other than `^`/`$` (which can only cause false alarms, not hide a problem); V8 has optimisations that make some theoretically quadratic patterns fast in practice (e.g. `\s+$` on a run of spaces with nothing after it), so treat "polynomial" as "can be slow on the right input" — the playground's *Confirm* button times your browser's engine on the attack; and it answers `too-complex` instead of guessing when the automaton is too large for its budget.
+Limits: it ignores assertions other than `^`/`$` (which can only cause false alarms, not hide a problem); V8 has optimisations that make some theoretically quadratic patterns fast in practice (e.g. `\d+px` on a long run of digits: the checker reports O(n²), which is what a plain backtracker does, but V8 finishes 32 000 digits in under a millisecond, whereas `a+b` on 32 000 `a`s really does take ~0.4 s), so treat "polynomial" as "can be slow on the right input" — the playground's *Confirm* button times your browser's engine on the attack; and it answers `too-complex` instead of guessing when the automaton is too large for its budget.
 
 ## Playground
 
@@ -292,7 +292,7 @@ node scripts/serve.mjs dist/playground 8080   # then open http://127.0.0.1:8080/
 | Captures | yes, JS rules (reset per iteration, empty check) | yes | yes | yes | yes | yes |
 | Lookaround / backrefs | no / no | no / no | no / no | no / no | no / no | no / no |
 | `\p{…}` | no | yes | yes | yes | yes | yes |
-| Speed on ordinary input | interpreter: ~20–60× slower than V8's JIT | very fast (DFA + one-pass + backtracker) | moderate | very fast (lazy DFA, literal SIMD prefilters) | fast | Pike VM: slower than the backtracker |
+| Speed on ordinary input | interpreter: ~10–50× slower than V8's JIT | very fast (DFA + one-pass + backtracker) | moderate | very fast (lazy DFA, literal SIMD prefilters) | fast | Pike VM: slower than the backtracker |
 | Dependencies | none | native build or prebuilt binaries | none | — | — | — |
 
 Where this project is weaker: raw speed (no DFA, no SIMD prefilters), no `\p{…}`, no lookaround — RE2 and Rust's `regex` are mature, heavily optimised engines. Where it is stronger for JavaScript code: it gives **the same answers as `RegExp`** (RE2's `\s`, `$`, case folding, empty-match and capture rules differ from JavaScript's, so swapping `RegExp` for RE2 can silently change results), it runs anywhere JavaScript runs with no build step, and it reports unsupported syntax with a precise reason. The V8 engine has exactly the right semantics but isn't available to web pages or default Node.
