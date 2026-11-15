@@ -2,7 +2,9 @@
 
 Everything else is done and verified (see HANDOVER.md). These items need repository-owner access or a decision only the owner can make. None blocks using the library.
 
-## 1. Tag and release v1.0.0 (required)
+## 1. Tag and release v1.0.0 (required) — done 2026-11-15
+
+**Done 2026-11-15:** tag `v1.0.0` pushed and release published: https://github.com/vincentwesley/safe-regex/releases/tag/v1.0.0
 
 The project is merged into `main` (pull request #1, merge commit `a6715bf`), but the session that built it could not create the tag: its git access only allows pushing to its working branch, and `git push origin v1.0.0` was refused by the remote. Tag the merged `main`:
 
@@ -23,11 +25,15 @@ gh release create v1.0.0 --title "v1.0.0" --notes-file <(sed -n '/## \[1.0.0\]/,
 
 After the tag exists, the README's install line works: `npm install github:vincentwesley/safe-regex#v1.0.0`.
 
-## 2. Turn on private vulnerability reporting
+## 2. Turn on private vulnerability reporting — done 2026-11-15
+
+**Done 2026-11-15:** enabled (API reports `"enabled": true`).
 
 SECURITY.md tells reporters to use GitHub's private "Report a vulnerability" button. Enable it: repository **Settings → Code security → Private vulnerability reporting → Enable**.
 
-## 3. Optional: host the playground on GitHub Pages
+## 3. Optional: host the playground on GitHub Pages — done 2026-11-15
+
+**Done 2026-11-15:** Pages source set to GitHub Actions, workflow added as `.github/workflows/pages.yml`, site live at https://vincentwesley.github.io/safe-regex/ and linked from the README.
 
 Not required (the playground builds to `dist/playground/` and runs from any static server). To publish it: **Settings → Pages → Build and deployment → Source: GitHub Actions**, then add this workflow as `.github/workflows/pages.yml`:
 

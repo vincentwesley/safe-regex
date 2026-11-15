@@ -269,6 +269,8 @@ Limits: it ignores assertions other than `^`/`$` (which can only cause false ala
 
 ## Playground
 
+Live: https://vincentwesley.github.io/safe-regex/
+
 A static site: match view, automaton drawing, a live race against your browser's engine, and the multi-pattern checker.
 
 ```bash

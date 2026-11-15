@@ -33,12 +33,11 @@ Status file for resuming work in a new session.
 * **`\p{…}` and the `v` flag**: need Unicode property tables; out of scope for 1.0.
 * **Lazy DFA / faster matching**: SafeRegExp is 12–52× slower than V8's JIT on ordinary input (`bench/results/throughput.md`). A DFA layer is the next step (D17); not started, to avoid rushing a second engine that must respect the empty-check state.
 * **Global-iteration bound**: a `g` loop can be O(n²·m) on adversarial input (each `exec` is linear). Documented (D19, README, SECURITY.md), not solved — same as Rust's `regex`.
-* **Playground hosting**: optional per the brief; not set up (needs repository settings). Steps in NEEDS-VIN.md.
 * **npm publish**: deliberately not done (needs the owner's token).
 
 ## What needs Vin
 See `docs/NEEDS-VIN.md` for exact steps:
-1. **Tag/release `v1.0.0`** on `main`. The work is merged (vincentwesley/safe-regex#1, merge commit `a6715bf`, CI green), but pushing the tag from this session was refused: its git access only covers the working branch. Until the tag exists, install with `npm install github:vincentwesley/safe-regex` (without `#v1.0.0`).
-2. Enable private vulnerability reporting (referenced by SECURITY.md).
-3. Optional: GitHub Pages for the playground (workflow provided).
+1. ~~Tag/release `v1.0.0`~~ Done 2026-11-15: tag `v1.0.0` pushed, GitHub release published with the npm tarball and playground zip.
+2. ~~Enable private vulnerability reporting~~ Done 2026-11-15.
+3. ~~GitHub Pages for the playground~~ Done 2026-11-15: https://vincentwesley.github.io/safe-regex/ (`.github/workflows/pages.yml`).
 4. Optional: npm publish.
