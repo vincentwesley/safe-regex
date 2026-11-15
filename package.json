@@ -1,0 +1,50 @@
+{
+  "name": "@vincentwesley/safe-regex",
+  "version": "1.0.0",
+  "description": "A JavaScript-compatible regular expression engine that runs in linear time, so ReDoS can't happen. Pure TypeScript, zero dependencies.",
+  "license": "MIT",
+  "author": "Vincent Wesley",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vincentwesley/safe-regex.git"
+  },
+  "homepage": "https://github.com/vincentwesley/safe-regex#readme",
+  "bugs": "https://github.com/vincentwesley/safe-regex/issues",
+  "keywords": ["regex", "regexp", "redos", "linear-time", "pike-vm", "nfa", "security"],
+  "type": "module",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["dist/esm", "dist/cjs", "dist/types", "src", "LICENSE", "README.md", "CHANGELOG.md"],
+  "sideEffects": false,
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "build": "npm run build:lib && npm run build:playground",
+    "build:lib": "node scripts/clean.mjs && tsc -p tsconfig.json && node scripts/post-build.mjs",
+    "build:playground": "node scripts/build-playground.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "test": "npm run build:lib && node --test --test-reporter=dot test/*.test.mjs test/*.test.cjs",
+    "fuzz": "node scripts/fuzz.mjs",
+    "bench": "node bench/run.mjs",
+    "gen:casefold": "node scripts/gen-casefold.mjs",
+    "acceptance": "node scripts/acceptance.mjs",
+    "prepare": "npm run build:lib"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "esbuild": "^0.28.2",
+    "eslint": "^10.15.0",
+    "globals": "^17.14.0",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.2"
+  }
+}
