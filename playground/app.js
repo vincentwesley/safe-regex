@@ -157,7 +157,7 @@ function update() {
 }
 
 $('verdict').addEventListener('click', (e) => {
-  if (!e.target.closest('[data-action="watch"]')) return;
+  if (!e.target.closest('[data-action="watch"]') || !current?.report?.attack) return;
   selectTab('race');
   startRace();
 });
@@ -192,9 +192,8 @@ function whyNot(pattern, flags) {
 }
 
 function supportCard(s) {
-  const key = s.kind === 'unsupported' ? s.feature : s.kind;
-  const friendly = FRIENDLY[key] ?? FRIENDLY.syntax;
-  const tech = techDetail(s.message);
+  const { friendly, raw } = whyNot($('pattern').value, $('flags').value) ?? { friendly: FRIENDLY.syntax, raw: s.message };
+  const tech = techDetail(raw);
   if (s.kind === 'unsupported') {
     return infoCard('SafeRegExp can\'t run this pattern', `<p>${esc(friendly)}</p><p>The built-in engine can still run it, but without the freeze protection.</p>${tech}`);
   }
@@ -252,7 +251,7 @@ function verdictCard(r, { pattern, flags, button, compact = false }) {
         <p>Use <code>SafeRegExp</code> instead of <code>RegExp</code> for this pattern, or rewrite the pattern so the same text can't be matched in more than one way.</p>
         ${techBlock(r, pattern, flags)}
       </details>
-      ${action(compact ? 'confirm' : 'watch')}</div>`;
+      ${r.attack ? action(compact ? 'confirm' : 'watch') : '<p class="hint">We couldn\'t build a tricky test text for this pattern automatically.</p>'}</div>`;
   }
   if (r.status === 'safe') {
     return `<div class="verdict verdict--ok${cls}">${label}<h3>✓ Safe with both engines</h3>
@@ -692,9 +691,14 @@ function bindFileInput(input, msgEl, area, after) {
       msgEl.textContent = `That file is ${Math.ceil(file.size / 1024)} KB. Please choose a text file of 200 KB or less.`;
       msgEl.classList.add('bad');
     } else {
-      area.value = await file.text();
-      msgEl.innerHTML = base;
-      after(file.name);
+      try {
+        area.value = await file.text();
+        msgEl.innerHTML = base;
+        after(file.name);
+      } catch {
+        msgEl.textContent = 'Couldn\'t read that file. Please try another text file.';
+        msgEl.classList.add('bad');
+      }
     }
     input.value = '';
   });
@@ -733,29 +737,37 @@ function runChecker() {
 }
 
 async function confirmInBrowser(btn, span, p, r) {
-  btn.disabled = true;
-  let last = null;
-  let killedAt = null;
-  for (const n of r.status === 'exponential' ? [10, 15, 20, 25, 30] : [1000, 4000, 16000, 64000]) {
-    span.textContent = 'Timing the built-in engine…';
-    const res = await timeOne('native', { pattern: p.pattern, flags: p.flags, ...r.attack, n }, 3000);
-    if (res.error) {
-      span.textContent = `Couldn't run the test: ${res.error}`;
-      btn.disabled = false;
-      return;
-    }
-    if (res.timeout) { killedAt = n; break; }
-    last = { n, ms: res.ms };
+  if (!r.attack) {
+    span.textContent = 'We couldn\'t build a tricky test text for this pattern automatically.';
+    return;
   }
-  const n = killedAt ?? last.n;
-  const len = attackString(r.attack, n).length.toLocaleString();
-  const safeMs = timeSafe(p, r, n);
-  span.textContent = killedAt
-    ? `Built-in engine: gave up after 3 s on a ${len}-character text. SafeRegExp: ${safeMs} on the same text.`
-    : last.ms > 50
-      ? `Built-in engine: took ${fmtMs(last.ms)} on a ${len}-character text. SafeRegExp: ${safeMs} on the same text.`
-      : `Built-in engine stayed fast in this browser (${fmtMs(last.ms)} on a ${len}-character text). Other browsers or longer texts may behave differently. SafeRegExp: ${safeMs}.`;
-  btn.disabled = false;
+  btn.disabled = true;
+  try {
+    let last = null;
+    let killedAt = null;
+    for (const n of r.status === 'exponential' ? [10, 15, 20, 25, 30] : [1000, 4000, 16000, 64000]) {
+      span.textContent = 'Timing the built-in engine…';
+      const res = await timeOne('native', { pattern: p.pattern, flags: p.flags, ...r.attack, n }, 3000);
+      if (res.error) {
+        span.textContent = `Couldn't run the test: ${res.error}`;
+        return;
+      }
+      if (res.timeout) { killedAt = n; break; }
+      last = { n, ms: res.ms };
+    }
+    const n = killedAt ?? last.n;
+    const len = attackString(r.attack, n).length.toLocaleString();
+    const safeMs = timeSafe(p, r, n);
+    span.textContent = killedAt
+      ? `Built-in engine: gave up after 3 s on a ${len}-character text. SafeRegExp: ${safeMs} on the same text.`
+      : last.ms > 50
+        ? `Built-in engine: took ${fmtMs(last.ms)} on a ${len}-character text. SafeRegExp: ${safeMs} on the same text.`
+        : `Built-in engine stayed fast in this browser (${fmtMs(last.ms)} on a ${len}-character text). Other browsers or longer texts may behave differently. SafeRegExp: ${safeMs}.`;
+  } catch {
+    span.textContent = 'Couldn\'t run the test in this browser. Please try again.';
+  } finally {
+    btn.disabled = false;
+  }
 }
 
 function timeSafe(p, r, n) {
