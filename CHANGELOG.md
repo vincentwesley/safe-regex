@@ -2,6 +2,12 @@
 
 All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+- Removed the `prepare` script, so installing or cloning the repository no longer runs a build automatically. Install from npm (`npm install @vincentwesley/safe-regex`); `npm publish` now builds and tests first via `prepublishOnly`.
+- Package author credit is now "Vin, Vin's Atelier".
+
 ## [1.0.0] - 2026-11-15
 
 ### Added

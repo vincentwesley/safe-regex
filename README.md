@@ -43,7 +43,7 @@ new SafeRegExp('^(a+)+$').test(evil);  // false, in about 0.1 s
 npm install @vincentwesley/safe-regex
 ```
 
-To install a tagged release straight from GitHub instead, use `npm install github:vincentwesley/safe-regex#v1.0.0`; npm clones the repository and runs the `prepare` script, which builds `dist/`. The package name is `@vincentwesley/safe-regex` (the unscoped `safe-regex` on npm is an unrelated ReDoS *detector*). ES modules and CommonJS are both provided, with TypeScript types.
+The package name is `@vincentwesley/safe-regex` (the unscoped `safe-regex` on npm is an unrelated ReDoS *detector*). ES modules and CommonJS are both provided, with TypeScript types.
 
 ```js
 import { SafeRegExp } from '@vincentwesley/safe-regex';      // ESM

@@ -37,7 +37,7 @@
     "bench": "node bench/run.mjs",
     "gen:casefold": "node scripts/gen-casefold.mjs",
     "acceptance": "node scripts/acceptance.mjs",
-    "prepare": "npm run build:lib"
+    "prepublishOnly": "npm test"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
