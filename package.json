@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A JavaScript-compatible regular expression engine that runs in linear time, so ReDoS can't happen. Pure TypeScript, zero dependencies.",
   "license": "MIT",
-  "author": "Vincent Wesley",
+  "author": "Vin, Vin's Atelier (https://vwesley.dev)",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vincentwesley/safe-regex.git"

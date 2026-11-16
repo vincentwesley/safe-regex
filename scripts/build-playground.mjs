@@ -21,5 +21,5 @@ await build({
   sourcemap: false,
   logLevel: 'warning',
 });
-for (const f of ['index.html', 'style.css']) cpSync(`playground/${f}`, `${out}/${f}`);
+for (const f of ['index.html', 'style.css', 'logo.css', 'logo-init.js', 'logo-resize.js']) cpSync(`playground/${f}`, `${out}/${f}`);
 console.log(`playground built in ${out}/`);
