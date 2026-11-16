@@ -75,7 +75,7 @@ legend { padding: 0; margin-bottom: var(--s1); }
 .pat { display: block; margin: 0 0 var(--s3); word-break: break-all; font-size: var(--step--1); }
 
 /* tabs */
-.hs-tabs [role="tab"] { min-height: 48px; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; line-height: 1.2; font-size: 0.8rem; padding-block: var(--s1); }
+.hs-tabs [role="tab"] { min-height: 48px; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; line-height: 1.2; font: 600 1rem var(--font-body); letter-spacing: 0; text-transform: none; padding-block: var(--s1); }
 .tab-note { font: 400 0.7rem var(--font-body); letter-spacing: 0; text-transform: none; opacity: 0.85; }
 .hs-tabs [role="tablist"] { gap: var(--s3); }
 .panel { padding: var(--s4); background: var(--bg-elev); box-shadow: var(--pix); min-width: 0; }
