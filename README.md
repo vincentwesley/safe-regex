@@ -1,5 +1,6 @@
 # safe-regex
 
+[![npm](https://img.shields.io/npm/v/@vincentwesley/safe-regex)](https://www.npmjs.com/package/@vincentwesley/safe-regex)
 [![CI](https://github.com/vincentwesley/safe-regex/actions/workflows/ci.yml/badge.svg)](https://github.com/vincentwesley/safe-regex/actions/workflows/ci.yml)
 ![dependencies: 0](https://img.shields.io/badge/runtime%20dependencies-0-blue)
 ![license: MIT](https://img.shields.io/badge/license-MIT-green)
@@ -38,13 +39,11 @@ new SafeRegExp('^(a+)+$').test(evil);  // false, in about 0.1 s
 
 ## Install
 
-The package is installed straight from GitHub (it is not on npm):
-
 ```bash
-npm install github:vincentwesley/safe-regex#v1.0.0
+npm install @vincentwesley/safe-regex
 ```
 
-(If the `v1.0.0` tag isn't visible on GitHub yet, drop `#v1.0.0` to install from `main`.) npm clones the repository and runs the `prepare` script, which builds `dist/`. The package name is `@vincentwesley/safe-regex` (the unscoped `safe-regex` on npm is an unrelated ReDoS *detector*). ES modules and CommonJS are both provided, with TypeScript types.
+To install a tagged release straight from GitHub instead, use `npm install github:vincentwesley/safe-regex#v1.0.0`; npm clones the repository and runs the `prepare` script, which builds `dist/`. The package name is `@vincentwesley/safe-regex` (the unscoped `safe-regex` on npm is an unrelated ReDoS *detector*). ES modules and CommonJS are both provided, with TypeScript types.
 
 ```js
 import { SafeRegExp } from '@vincentwesley/safe-regex';      // ESM

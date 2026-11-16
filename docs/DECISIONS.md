@@ -40,7 +40,7 @@ The checker builds an ε-free NFA from the compiled program, with ε-path multip
 Plain HTML/CSS + one bundled ES module (esbuild bundles the library). The automaton is drawn as SVG by a small layered layout written here. Native regex runs inside a Web Worker so a hung match can be terminated. Output goes to `dist/playground/`; it works from `file://`-free static hosting (any static server) and is not required to be deployed.
 
 ### D12. Packaging: ESM + CJS, installable from GitHub
-`npm install github:vincentwesley/safe-regex` runs the `prepare` script, which builds `dist/`. Package name `@vincentwesley/safe-regex` because `safe-regex` on npm is an unrelated, well-known ReDoS *detector* and would collide in users' `node_modules`. Not published to npm (needs the owner's token).
+`npm install github:vincentwesley/safe-regex` runs the `prepare` script, which builds `dist/`. Package name `@vincentwesley/safe-regex` because `safe-regex` on npm is an unrelated, well-known ReDoS *detector* and would collide in users' `node_modules`. Published to npm on 2026-11-16 (`@vincentwesley/safe-regex@1.0.0`).
 
 ### D13. Tooling: TypeScript 6.0, ESLint 10 + typescript-eslint, node:test, esbuild
 TypeScript 7 (native port) is out but typescript-eslint supports `<6.1`, so 6.0 is pinned. Tests use Node's built-in runner — no test-framework dependency — and run against the built output, which also tests the build.
