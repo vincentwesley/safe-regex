@@ -1,0 +1,25 @@
+# Everyday website checks, one per line. Lines starting with # are notes and are skipped.
+# Email address (simple)
+^[^\s@]+@[^\s@]+\.[^\s@]+$
+# Email address (stricter)
+^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$
+# Phone number like (555) 010-1234
+^\(?\d{3}\)?[-. ]?\d{3}[-. ]?\d{4}$
+# Date like 2026-11-16
+^\d{4}-\d{2}-\d{2}$
+# UK postcode
+/^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i
+# Website address
+/^https?:\/\/[^\s/$.?#][^\s]*$/i
+# Website address (a popular copy-and-paste version)
+^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$
+# Username: 3 to 16 letters, digits or underscores
+^[a-z0-9_]{3,16}$
+# Password rule: at least 8 characters
+^[A-Za-z\d@$!%*?&]{8,}$
+# Password rule: needs a digit and a lowercase letter
+^(?=.*\d)(?=.*[a-z]).{8,}$
+# Hex colour like #1a2b3c
+^#(?:[0-9a-fA-F]{3}){1,2}$
+# Trim spaces at the start and end
+^\s+|\s+$

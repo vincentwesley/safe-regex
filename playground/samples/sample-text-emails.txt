@@ -1,0 +1,6 @@
+ana.silva@example.com
+ben_k@example.org
+carla+news@example.com
+not-an-email@
+dev.team@mail.example.org
+x@y

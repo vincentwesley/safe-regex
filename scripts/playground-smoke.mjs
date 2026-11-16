@@ -24,6 +24,8 @@ try {
   const status = await page.textContent('#verdict');
   if (!/Risky with ordinary regex engines/.test(status)) fail(`status line: ${status}`);
   if ((await page.locator('#match-out mark').count()) < 1) fail('no highlighted match');
+  const pieces = await page.locator('#explain-rows li[data-i]').count();
+  if (pieces < 3) fail(`explainer: ${pieces} rows for ^(a+)+$`);
 
   await page.click('button[data-tab="how"]');
   await page.waitForSelector('#graph svg .node');
@@ -40,6 +42,17 @@ try {
   if (results !== 6 || !/Risky with ordinary/.test(text) || !/Safe with both engines/.test(text) || !/can't run this pattern/.test(text)) fail(`checker output: ${results} results`);
   if (process.env.SHOT) await page.screenshot({ path: `${process.env.SHOT}/checker.png`, fullPage: true });
 
+  await page.click('[data-list="everyday"]');
+  await page.waitForFunction(() => document.querySelectorAll('#checker-out .result').length >= 10);
+  const sampleResults = await page.locator('#checker-out .result').count();
+  const sampleText = await page.innerText('#checker-out'); // visible text only: raw library wording stays inside closed disclosures
+  if (!/Risky with ordinary/.test(sampleText) || !/Safe with both engines/.test(sampleText) || /NP-hard|offset/.test(sampleText)) fail('sample list output');
+  const sampleFile = await fetch(`${url}samples/everyday-patterns.txt`);
+  if (sampleFile.status !== 200) fail(`sample file status ${sampleFile.status}`);
+  await page.setInputFiles('#check-file', { name: 'mine.txt', mimeType: 'text/plain', buffer: Buffer.from('# my list\n^a+$\n') });
+  await page.waitForFunction(() => document.querySelector('#checker-in').value.startsWith('# my list'));
+  await page.waitForFunction(() => document.querySelectorAll('#checker-out .result').length === 1);
+
   await page.click('button[data-tab="race"]');
   await page.locator('details:has(#race-limit) > summary').click();
   await page.selectOption('#race-limit', '1000');
@@ -48,8 +61,13 @@ try {
   await page.waitForSelector('#race-chart svg path');
   if (process.env.SHOT) await page.screenshot({ path: `${process.env.SHOT}/race.png`, fullPage: true });
   await page.click('#race-stop');
+
+  await page.click('#demo-go');
+  await page.waitForFunction(() => /gave up/.test(document.querySelector('#demo-caption').textContent), null, { timeout: 90000 });
+  await page.click('#demo-close');
+  if (!(await page.locator('#demo-banner').isHidden())) fail('demo banner did not close');
   if (errors.length) fail(`console errors: ${errors.join(' | ')}`);
-  if (!process.exitCode) console.log(`PASS: playground smoke test (${nodes} automaton nodes, ${results} checker results, built-in engine gave up)`);
+  if (!process.exitCode) console.log(`PASS: playground smoke test (${nodes} automaton nodes, ${results} checker results, ${sampleResults} sample-list results, ${pieces} explainer rows, built-in engine gave up, demo finished)`);
 } catch (e) {
   fail(String(e));
 } finally {

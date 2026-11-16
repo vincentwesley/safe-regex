@@ -1,5 +1,11 @@
 import { SafeRegExp, analyze, attackString, buildNfa, checkSupport, OP_NAMES } from '../src/index.ts';
 import { initThemeToggle } from './house/js/theme.js';
+import { explain } from './explain.js';
+// Sample files are bundled as text (esbuild "text" loader), so the downloadable files and the buttons share one source.
+import outagePatterns from './samples/outage-patterns.txt';
+import everydayPatterns from './samples/everyday-patterns.txt';
+import emailsText from './samples/sample-text-emails.txt';
+import mixedText from './samples/sample-text-mixed.txt';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -7,18 +13,25 @@ const SVGNS = 'http://www.w3.org/2000/svg';
 
 initThemeToggle($('theme-toggle'));
 
-// [group, friendly name, pattern, flags, sample text]
+// [group, friendly name, pattern, flags, sample text, plain description]
 const EXAMPLES = [
-  ['risky', 'Classic nested repeat (OWASP example)', '^(a+)+$', 'g', 'aaaaaaaa'],
-  ['risky', 'Overlapping choices (OWASP example)', '^(a|aa)+$', 'g', 'aaaaaa'],
-  ['risky', 'Email checker (OWASP example)', '^([a-zA-Z0-9])(([\\-.]|[_]+)?([a-zA-Z0-9]+))*(@){1}[a-z0-9]+[.]{1}(([a-z]{2,3})|([a-z]{2,3}[.]{1}[a-z]{2,3}))$', 'g', 'someone@example.com'],
-  ['risky', 'Stack Overflow outage, 2016', '^[\\s\\u200c]+|[\\s\\u200c]+$', 'g', '   hello world   '],
-  ['risky', 'Cloudflare outage, 2019 (excerpt)', '.*(?:.*=.*)', 'g', 'name=value'],
-  ['risky', 'ms package vulnerability (CVE-2015-8315)', '^((?:\\d+)?\\.?\\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$', 'gi', '100 ms'],
-  ['risky', 'normalize-url vulnerability (CVE-2021-33502)', '^data:(.*?),(.*?)(?:#(.*))?$', 'g', 'data:text/plain,hello'],
-  ['safe', 'A date like 2026-11-16', '^(?<y>\\d{4})-(?<m>\\d\\d)-(?<d>\\d\\d)$', 'g', '2026-11-16'],
-  ['safe', 'A website name like www.example.com', '^(?:[a-z0-9]+\\.)*[a-z]+$', 'gi', 'www.example.com'],
+  ['risky', 'Classic nested repeat (OWASP example)', '^(a+)+$', 'g', 'aaaaaaaa', 'Checks that a text is only the letter a, repeated. Real attackers abuse patterns shaped like this: a repeat inside another repeat.'],
+  ['risky', 'Overlapping choices (OWASP example)', '^(a|aa)+$', 'g', 'aaaaaa', 'Accepts text made only of a’s, in chunks of one or two. The two choices overlap, so the same text can be split in many ways.'],
+  ['risky', 'Email checker (OWASP example)', '^([a-zA-Z0-9])(([\\-.]|[_]+)?([a-zA-Z0-9]+))*(@){1}[a-z0-9]+[.]{1}(([a-z]{2,3})|([a-z]{2,3}[.]{1}[a-z]{2,3}))$', 'g', 'someone@example.com', 'Checks that an email address looks right. A published example of an email pattern that a crafted text can slow down.'],
+  ['risky', 'Stack Overflow outage, 2016', '^[\\s\\u200c]+|[\\s\\u200c]+$', 'g', '   hello world   ', 'Trims spaces from the start and end of text. Stack Overflow went down in 2016 because of a pattern like this.'],
+  ['risky', 'Cloudflare outage, 2019 (excerpt)', '.*(?:.*=.*)', 'g', 'name=value', 'Looks for text containing an equals sign. Part of a pattern behind a worldwide Cloudflare outage in 2019.'],
+  ['risky', 'ms package vulnerability (CVE-2015-8315)', '^((?:\\d+)?\\.?\\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$', 'gi', '100 ms', 'Reads a duration like “100 ms” or “2 hours”. An old version of the ms package could be slowed to a crawl by a long crafted text.'],
+  ['risky', 'normalize-url vulnerability (CVE-2021-33502)', '^data:(.*?),(.*?)(?:#(.*))?$', 'g', 'data:text/plain,hello', 'Reads a “data:” web address. A flaw in the normalize-url package let a crafted address slow it down.'],
+  ['safe', 'A date like 2026-11-16', '^(?<y>\\d{4})-(?<m>\\d\\d)-(?<d>\\d\\d)$', 'g', '2026-11-16', 'Checks a date written like 2026-11-16: four digits, two digits, two digits. Fixed lengths, so it stays fast.'],
+  ['safe', 'A website name like www.example.com', '^(?:[a-z0-9]+\\.)*[a-z]+$', 'gi', 'www.example.com', 'Checks a website name: pieces of letters and digits separated by dots.'],
 ];
+
+const SAMPLE_TEXTS = {
+  emails: emailsText,
+  mixed: mixedText,
+  spaces: '   hello   world   \n\tindented line with   extra   spaces   ',
+};
+const MAX_FILE = 200 * 1024;
 
 const SAFE_LINE = '✓ Safe with SafeRegExp: it always finishes in time proportional to the length of the text.';
 const VALID_FLAGS = 'dgimsuvy';
@@ -67,7 +80,7 @@ addEventListener('hashchange', () => {
 // ---------------- pattern state ----------------
 const sel = $('examples');
 const group = (g, label) => `<optgroup label="${label}">${EXAMPLES.map((e, i) => (e[0] === g ? `<option value="${i}">${esc(e[1])}</option>` : '')).join('')}</optgroup>`;
-sel.innerHTML = group('risky', 'Risky patterns (from real incidents)') + group('safe', 'Safe patterns') + '<option value="custom" hidden>Your own pattern</option>';
+sel.innerHTML = group('risky', 'Risky patterns (real outages and well-known examples)') + group('safe', 'Safe patterns') + '<option value="custom" hidden>Your own pattern</option>';
 sel.value = '0';
 const boxes = [...document.querySelectorAll('[data-flag]')];
 
@@ -77,10 +90,15 @@ function loadExample(i) {
   $('pattern').value = e[2];
   $('flags').value = e[3];
   $('subject').value = e[4];
+  sel.value = String(i);
+  $('example-desc').textContent = e[5] ?? '';
   syncBoxes();
   update();
 }
 sel.addEventListener('change', () => loadExample(Number(sel.value)));
+for (const b of document.querySelectorAll('[data-text]')) {
+  b.addEventListener('click', () => { $('subject').value = SAMPLE_TEXTS[b.dataset.text]; renderMatches(); });
+}
 
 function syncBoxes() {
   const f = $('flags').value;
@@ -95,7 +113,7 @@ for (const b of boxes) {
   });
 }
 $('flags').addEventListener('input', () => { syncBoxes(); update(); });
-$('pattern').addEventListener('input', () => { sel.value = 'custom'; update(); });
+$('pattern').addEventListener('input', () => { sel.value = 'custom'; $('example-desc').textContent = ''; update(); });
 $('subject').addEventListener('input', renderMatches);
 
 function checkFlags(flags) {
@@ -132,6 +150,7 @@ function update() {
     }
   }
   $('verdict').innerHTML = html;
+  renderExplain(msg || pattern === '' ? null : explain(pattern, flags));
   renderMatches();
   if (activeTab === 'how') renderAutomaton();
   if (activeTab === 'race') prepareRace();
@@ -148,14 +167,54 @@ function infoCard(title, body, cls = 'verdict--info') {
   return `<div class="verdict ${cls}"><h3>${esc(title)}</h3>${body}</div>`;
 }
 
+// One plain sentence per problem; the library's own wording goes under "Technical detail".
+const FRIENDLY = {
+  backreference: 'This pattern points back at text it already matched (like \\1). That trick can\'t be made fast, so SafeRegExp doesn\'t support it.',
+  'named-backreference': 'This pattern points back at text it already matched (like \\k<name>). That trick can\'t be made fast, so SafeRegExp doesn\'t support it.',
+  lookahead: 'This pattern peeks ahead at the text without using it up (a "lookahead"). SafeRegExp doesn\'t support that yet.',
+  lookbehind: 'This pattern peeks back at the text before the current spot (a "lookbehind"). SafeRegExp doesn\'t support that yet.',
+  'unicode-property': 'This pattern looks for characters by category, such as all letters in any language (\\p{…}). SafeRegExp doesn\'t include the tables for that.',
+  'unicode-sets-flag': 'The "v" option isn\'t supported by SafeRegExp. The "u" option is the closest alternative.',
+  'legacy-octal': 'This pattern uses an old-style number code for a character (like \\01). Write it as \\x01 instead.',
+  'group-name': 'A group name uses something other than plain English letters, digits, _ or $. SafeRegExp only supports plain names.',
+  syntax: 'There\'s a typo in the pattern, for example a bracket that isn\'t closed.',
+  limit: 'This pattern is too big for SafeRegExp to handle.',
+};
+const techDetail = (raw) => `<details><summary>Technical detail</summary><p class="mono tech-raw">${esc(raw)}</p></details>`;
+
+// Why SafeRegExp can't run a pattern, as { title, friendly, raw }, or null if it can.
+function whyNot(pattern, flags) {
+  let s;
+  try { s = checkSupport(pattern, flags); } catch (err) { s = { ok: false, kind: 'syntax', message: String(err && err.message) }; }
+  if (s.ok) return null;
+  const key = s.kind === 'unsupported' ? s.feature : s.kind;
+  return { kind: s.kind, friendly: FRIENDLY[key] ?? FRIENDLY.syntax, raw: s.message };
+}
+
 function supportCard(s) {
-  let body = `<p>${esc(s.message)}</p>`;
+  const key = s.kind === 'unsupported' ? s.feature : s.kind;
+  const friendly = FRIENDLY[key] ?? FRIENDLY.syntax;
+  const tech = techDetail(s.message);
   if (s.kind === 'unsupported') {
-    body += '<p>SafeRegExp leaves out backreferences, lookaround, <code>\\p{…}</code> and the <code>v</code> flag. They can\'t be guaranteed to finish quickly, or aren\'t supported yet. The built-in engine can still run this pattern, but without the freeze protection.</p>';
-    return infoCard('SafeRegExp can\'t run this pattern', body);
+    return infoCard('SafeRegExp can\'t run this pattern', `<p>${esc(friendly)}</p><p>The built-in engine can still run it, but without the freeze protection.</p>${tech}`);
   }
-  if (s.kind === 'syntax') return infoCard('This isn\'t a valid pattern yet', `${body}<p>Check for a missing bracket or a stray symbol.</p>`);
-  return infoCard('SafeRegExp can\'t run this pattern', body);
+  if (s.kind === 'syntax') return infoCard('This isn\'t a valid pattern yet', `<p>${esc(friendly)}</p>${tech}`);
+  return infoCard('SafeRegExp can\'t run this pattern', `<p>${esc(friendly)}</p>${tech}`);
+}
+
+function renderExplain(ex) {
+  const box = $('explain');
+  box.hidden = !ex;
+  if (!ex) return;
+  const input = $('pattern');
+  $('explain-rows').innerHTML = ex.rows.map((r, i) => `<li tabindex="0" data-i="${i}"><code>${esc(r.piece)}</code><span>${esc(r.text)}</span></li>`).join('')
+    + (ex.more ? `<li class="more-row"><span>…and ${ex.more} more piece${ex.more === 1 ? '' : 's'}.</span></li>` : '');
+  for (const li of $('explain-rows').querySelectorAll('li[data-i]')) {
+    const r = ex.rows[Number(li.dataset.i)];
+    const show = () => input.setSelectionRange(r.start, r.end);
+    li.addEventListener('mouseenter', show);
+    li.addEventListener('focus', show);
+  }
 }
 
 function patHtml(r, pattern, flags) {
@@ -202,18 +261,20 @@ function verdictCard(r, { pattern, flags, button, compact = false }) {
   }
   if (r.status === 'too-complex') {
     return `<div class="verdict verdict--info${cls}">${label}<h3>Couldn't fully check this pattern</h3>
-      <p>${esc(r.explanation)}</p>
-      <p class="reassure">✓ SafeRegExp still matches it in time proportional to the length of the text.</p></div>`;
+      <p>This pattern is too intricate for our checker to fully analyse.</p>
+      <p class="reassure">✓ SafeRegExp still matches it in time proportional to the length of the text.</p>${techDetail(r.explanation)}</div>`;
   }
   if (r.status === 'unsupported') {
+    const w = whyNot(pattern, flags);
     return `<div class="verdict verdict--info${cls}">${label}<h3>SafeRegExp can't run this pattern</h3>
-      <p>${esc(r.explanation)}</p>
-      <p>SafeRegExp leaves out backreferences, lookaround, <code>\\p{…}</code> and the <code>v</code> flag. They can't be guaranteed to finish quickly, or aren't supported yet, so this checker can't tell whether the pattern is risky.</p></div>`;
+      <p>${esc(w ? w.friendly : 'This pattern uses a feature SafeRegExp leaves out.')}</p>
+      <p>So this checker can't tell whether the pattern is risky.</p>${techDetail(w ? w.raw : r.explanation)}</div>`;
   }
   if (r.status === 'invalid') {
-    return `<div class="verdict verdict--info${cls}">${label}<h3>This isn't a valid pattern</h3><p>${esc(r.explanation)}</p></div>`;
+    const w = whyNot(pattern, flags);
+    return `<div class="verdict verdict--info${cls}">${label}<h3>This isn't a valid pattern</h3><p>${esc(FRIENDLY.syntax)}</p>${techDetail(w ? w.raw : r.explanation)}</div>`;
   }
-  return `<div class="verdict verdict--info${cls}">${label}<h3>Couldn't fully check this pattern</h3><p>${esc(r.summary)}. ${esc(r.explanation)}</p></div>`;
+  return `<div class="verdict verdict--info${cls}">${label}<h3>Couldn't fully check this pattern</h3><p>Our checker couldn't reach a clear answer for this pattern.</p>${techDetail(`${r.summary}. ${r.explanation}`)}</div>`;
 }
 
 // ---------------- match tab ----------------
@@ -596,7 +657,7 @@ function drawRaceChart(points, limit) {
 // ---------------- "Check my patterns" tab ----------------
 function parseLine(line) {
   const t = line.trim();
-  if (!t) return null;
+  if (!t || t.startsWith('#')) return null; // blank lines and "# notes" are skipped
   if (t.startsWith('/')) {
     const end = t.lastIndexOf('/');
     if (end > 0) return { pattern: t.slice(1, end), flags: t.slice(end + 1) };
@@ -606,7 +667,46 @@ function parseLine(line) {
 
 const MAX_LINES = 50;
 
-$('checker-go').addEventListener('click', () => {
+const SAMPLE_LISTS = {
+  outage: [outagePatterns, 'Seven patterns from real outages, vulnerabilities and well-known examples. Our checker flags every one of them as slow or risky.'],
+  everyday: [everydayPatterns, 'Twelve everyday website checks. Most are safe, a few can be slow or freeze, and one uses a feature SafeRegExp can\'t run.'],
+  mixed: [$('checker-in').value, 'A short mixed list: risky, safe, and one SafeRegExp can\'t run.'],
+};
+for (const b of document.querySelectorAll('[data-list]')) {
+  b.addEventListener('click', () => {
+    const [text, desc] = SAMPLE_LISTS[b.dataset.list];
+    $('checker-in').value = text;
+    $('list-desc').textContent = `${desc} Lines starting with # are notes and are skipped.`;
+    runChecker();
+  });
+}
+
+// Reads a small local text file into a textarea (never uploaded, never inserted as HTML).
+function bindFileInput(input, msgEl, area, after) {
+  const base = msgEl.innerHTML;
+  input.addEventListener('change', async () => {
+    const file = input.files[0];
+    if (!file) return;
+    msgEl.classList.remove('bad');
+    if (file.size > MAX_FILE) {
+      msgEl.textContent = `That file is ${Math.ceil(file.size / 1024)} KB. Please choose a text file of 200 KB or less.`;
+      msgEl.classList.add('bad');
+    } else {
+      area.value = await file.text();
+      msgEl.innerHTML = base;
+      after(file.name);
+    }
+    input.value = '';
+  });
+}
+bindFileInput($('match-file'), $('match-file-msg'), $('subject'), renderMatches);
+bindFileInput($('check-file'), $('check-file-msg'), $('checker-in'), (name) => {
+  $('list-desc').textContent = `Loaded ${name}. Lines starting with # are notes and are skipped.`;
+  runChecker();
+});
+
+$('checker-go').addEventListener('click', runChecker);
+function runChecker() {
   const out = $('checker-out');
   out.innerHTML = '';
   const lines = $('checker-in').value.split('\n').map(parseLine).filter(Boolean);
@@ -629,8 +729,8 @@ $('checker-go').addEventListener('click', () => {
     if (btn) btn.addEventListener('click', () => confirmInBrowser(btn, div.querySelector('.confirm-out'), p, r));
     out.append(div);
   }
-  if (lines.length > MAX_LINES) out.insertAdjacentHTML('beforeend', `<p class="hint">Only the first ${MAX_LINES} patterns were checked.</p>`);
-});
+  if (lines.length > MAX_LINES) out.insertAdjacentHTML('beforeend', `<p class="hint">The list has ${lines.length} patterns; only the first ${MAX_LINES} were checked.</p>`);
+}
 
 async function confirmInBrowser(btn, span, p, r) {
   btn.disabled = true;
@@ -665,6 +765,54 @@ function timeSafe(p, r, n) {
   re.test(s);
   return fmtMs(performance.now() - t);
 }
+
+// ---------------- guided demo ----------------
+let demoRun = 0;
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const scrollTo = (el) => el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+
+function demoCaption(step, text) {
+  $('demo-banner').hidden = false;
+  $('demo-step').textContent = step;
+  $('demo-caption').textContent = text;
+}
+
+function demoEnd() {
+  demoRun++;
+  $('demo-banner').hidden = true;
+  $('verdict').closest('.verdict-wrap').classList.remove('demo-hl');
+  $('race-limit').value = '3000';
+  if (racing) $('race-stop').click();
+}
+
+async function startDemo() {
+  demoEnd();
+  const run = demoRun;
+  const alive = () => run === demoRun;
+  selectTab('match');
+  loadExample(0);
+  demoCaption('Step 1 of 3.', 'We load a pattern that looks harmless: it checks that a text is only the letter “a”. Read what each piece means under the pattern box.');
+  scrollTo($('explain').closest('.pattern-card'));
+  await sleep(3500);
+  if (!alive()) return;
+  const wrap = $('verdict').closest('.verdict-wrap');
+  wrap.classList.add('demo-hl');
+  demoCaption('Step 2 of 3.', 'Our checker says it is risky: a crafted text of just a few dozen characters could freeze it.');
+  scrollTo(wrap);
+  await sleep(3500);
+  if (!alive()) return;
+  wrap.classList.remove('demo-hl');
+  selectTab('race');
+  $('race-limit').value = '1000';
+  demoCaption('Step 3 of 3.', 'Racing the built-in engine (given 1 second) against SafeRegExp on a text that keeps growing…');
+  scrollTo($('panel-race'));
+  await startRace();
+  if (!alive()) return;
+  demoCaption('Done.', $('race-summary').textContent || 'The race finished.');
+  $('race-limit').value = '3000';
+}
+$('demo-go').addEventListener('click', startDemo);
+$('demo-close').addEventListener('click', demoEnd);
 
 // ---------------- start ----------------
 syncBoxes();

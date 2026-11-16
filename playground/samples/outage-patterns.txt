@@ -1,0 +1,13 @@
+# Patterns from real outages and vulnerabilities, one per line. Lines starting with # are notes and are skipped.
+# Stack Overflow outage, 2016
+/^[\s‌]+|[\s‌]+$/g
+# Cloudflare outage, 2019 (excerpt)
+/.*(?:.*=.*)/g
+# ms package vulnerability (CVE-2015-8315)
+/^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/gi
+# normalize-url vulnerability (CVE-2021-33502)
+/^data:(.*?),(.*?)(?:#(.*))?$/g
+# OWASP examples of risky patterns
+/^(a+)+$/
+/^(a|aa)+$/
+/^([a-zA-Z0-9])(([\-.]|[_]+)?([a-zA-Z0-9]+))*(@){1}[a-z0-9]+[.]{1}(([a-z]{2,3})|([a-z]{2,3}[.]{1}[a-z]{2,3}))$/

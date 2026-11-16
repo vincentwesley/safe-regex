@@ -17,10 +17,12 @@ await build({
   format: 'esm',
   target: 'es2022',
   outdir: out,
+  loader: { '.txt': 'text' }, // sample files are bundled into app.js as strings
   minify: true,
   sourcemap: false,
   logLevel: 'warning',
 });
 for (const f of ['index.html', 'style.css', 'logo.css', 'logo-resize.js']) cpSync(`playground/${f}`, `${out}/${f}`);
-cpSync('playground/house', `${out}/house`, { recursive: true }); // house kit: tokens, components, fonts, theme-init, credits
+cpSync('playground/samples', `${out}/samples`, { recursive: true }); // downloadable sample files
+cpSync('playground/house',`${out}/house`, { recursive: true }); // house kit: tokens, components, fonts, theme-init, credits
 console.log(`playground built in ${out}/`);

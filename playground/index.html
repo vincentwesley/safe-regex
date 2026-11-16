@@ -17,6 +17,10 @@
 <body>
   <a class="hs-skip" href="#main">Skip to the playground</a>
   <div class="page">
+  <div id="demo-banner" class="hs-banner hs-banner--info demo-banner" role="status" hidden>
+    <p class="demo-text"><strong id="demo-step"></strong> <span id="demo-caption"></span></p>
+    <button id="demo-close" type="button" class="demo-x" aria-label="Stop the demo">&times;</button>
+  </div>
   <header class="top">
     <div class="top-row">
       <h1>safe-regex <span class="sub">playground</span></h1>
@@ -28,9 +32,12 @@
       <li><span class="step-n" aria-hidden="true">2</span><span><strong>Read the verdict:</strong> is it risky?</span></li>
       <li><span class="step-n" aria-hidden="true">3</span><span><strong>Start the race</strong> and watch.</span></li>
     </ol>
+    <div class="demo-cta"><button id="demo-go" type="button" class="hs-btn big">Show me in 30 seconds</button><span class="hint">A guided tour: we load a risky pattern, read the verdict, then race it. Nothing to type.</span></div>
     <details class="glossary">
       <summary>What do these words mean?</summary>
       <dl>
+        <dt>Why should I care?</dt>
+        <dd>Sign-up forms, search boxes and servers all use patterns like these to check text. One risky pattern can let a single crafted message freeze a whole service.</dd>
         <dt>Pattern (regular expression, "regex")</dt>
         <dd>A short piece of code that describes the kind of text to look for, such as "some digits, a dash, then four digits".</dd>
         <dt>Text to search</dt>
@@ -54,12 +61,18 @@
       <h2 id="h-pattern">Step 1: pick a pattern</h2>
       <div class="field">
         <label for="examples">Pick an example</label>
-        <select id="examples" class="hs-select"></select>
+        <select id="examples" class="hs-select" aria-describedby="example-desc"></select>
+        <p class="hint" id="example-desc"></p>
       </div>
       <div class="field">
         <label for="pattern">The pattern (you can edit it)</label>
         <span class="slashed"><span class="slash" aria-hidden="true">/</span><input id="pattern" class="hs-input mono" spellcheck="false" autocomplete="off" autocapitalize="off" value="^(a+)+$"><span class="slash" aria-hidden="true">/</span></span>
         <p class="hint" id="pattern-hint">A pattern describes the text to look for. Change it and the verdict below updates as you type.</p>
+        <div id="explain" class="explain" hidden>
+          <h3>What this pattern means</h3>
+          <ol id="explain-rows" class="pieces"></ol>
+          <p class="hint">Point at a row to select that part of the pattern.</p>
+        </div>
       </div>
       <fieldset class="flags">
         <legend>Options</legend>
@@ -101,6 +114,17 @@
           <div class="field">
             <label for="subject">Text to search</label>
             <textarea id="subject" class="hs-textarea mono" rows="4" spellcheck="false">aaaaaaaa</textarea>
+          </div>
+          <div class="samples">
+            <span class="samples-label">No text handy? Try a sample:</span>
+            <button type="button" class="hs-btn hs-btn--secondary hs-btn--sm" data-text="emails">Email addresses</button>
+            <button type="button" class="hs-btn hs-btn--secondary hs-btn--sm" data-text="mixed">Dates, phones and websites</button>
+            <button type="button" class="hs-btn hs-btn--secondary hs-btn--sm" data-text="spaces">Messy spaces</button>
+          </div>
+          <div class="field filebox">
+            <label for="match-file">Or open a text file from your computer (.txt, up to 200 KB)</label>
+            <input id="match-file" class="hs-input" type="file" accept=".txt,text/plain">
+            <p class="hint" id="match-file-msg">Nothing is uploaded; the file stays on your computer. Sample files: <a href="samples/sample-text-emails.txt" download>emails</a>, <a href="samples/sample-text-mixed.txt" download>dates, phones and websites</a>.</p>
           </div>
           <p id="match-summary" class="result-line" role="status"></p>
           <div id="match-out" class="match-out"></div>
@@ -147,6 +171,18 @@
 /(\\*)"/g
 ^(?:[a-z0-9]+\.)*[a-z]+$
 (a)\1</textarea>
+          </div>
+          <div class="samples">
+            <span class="samples-label">No patterns handy? Load a sample list:</span>
+            <button type="button" class="hs-btn hs-btn--secondary hs-btn--sm" data-list="outage">Real outages and vulnerabilities</button>
+            <button type="button" class="hs-btn hs-btn--secondary hs-btn--sm" data-list="everyday">Everyday website checks</button>
+            <button type="button" class="hs-btn hs-btn--secondary hs-btn--sm" data-list="mixed">Mixed starter list</button>
+          </div>
+          <p class="hint" id="list-desc">Lines starting with # are notes and are skipped.</p>
+          <div class="field filebox">
+            <label for="check-file">Or open a text file of patterns (.txt, up to 200 KB)</label>
+            <input id="check-file" class="hs-input" type="file" accept=".txt,text/plain">
+            <p class="hint" id="check-file-msg">Nothing is uploaded; the file stays on your computer. Sample files: <a href="samples/outage-patterns.txt" download>real outages</a>, <a href="samples/everyday-patterns.txt" download>everyday website checks</a>.</p>
           </div>
           <div class="race-actions"><button id="checker-go" type="button" class="hs-btn">Check these patterns</button></div>
           <div id="checker-out" aria-live="polite"></div>
