@@ -1,5 +1,5 @@
 // Builds the static playground into dist/playground: bundles playground/*.js with the library
-// (esbuild) and copies the HTML/CSS. The output is plain static files: serve the folder with
+// (esbuild) and copies the HTML/CSS and the house kit folder. The output is plain static files: serve the folder with
 // any static file server (ES modules and Web Workers need http://, not file://).
 import { build } from 'esbuild';
 import { cpSync, existsSync, mkdirSync, rmSync } from 'node:fs';
@@ -21,5 +21,6 @@ await build({
   sourcemap: false,
   logLevel: 'warning',
 });
-for (const f of ['index.html', 'style.css', 'logo.css', 'logo-init.js', 'logo-resize.js']) cpSync(`playground/${f}`, `${out}/${f}`);
+for (const f of ['index.html', 'style.css', 'logo.css', 'logo-resize.js']) cpSync(`playground/${f}`, `${out}/${f}`);
+cpSync('playground/house', `${out}/house`, { recursive: true }); // house kit: tokens, components, fonts, theme-init, credits
 console.log(`playground built in ${out}/`);

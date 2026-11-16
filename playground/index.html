@@ -1,129 +1,266 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="author" content="Vin, Vin's Atelier">
-  <script src="logo-init.js"></script>
+  <meta name="theme-color" content="#11150e">
+  <meta name="description" content="Try safe-regex in your browser: see which search patterns can freeze a website, and watch SafeRegExp stay fast.">
+  <script src="house/js/theme-init.js"></script>
   <title>safe-regex playground</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="house/tokens.css">
+  <link rel="stylesheet" href="house/components.css">
+  <link rel="stylesheet" href="house/credits/credits.css">
   <link rel="stylesheet" href="logo.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <a class="hs-skip" href="#main">Skip to the playground</a>
+  <div class="page">
   <header class="top">
-    <h1>safe-regex <span class="sub">playground</span></h1>
-    <p class="lede">A JavaScript-compatible regex engine that matches in linear time. Draw the automaton for a pattern, race it against your browser's built-in engine on a hostile input, and check which of your patterns would blow up.</p>
+    <div class="top-row">
+      <h1>safe-regex <span class="sub">playground</span></h1>
+      <button id="theme-toggle" type="button" class="hs-btn hs-btn--secondary hs-btn--sm" aria-pressed="false">Light / dark</button>
+    </div>
+    <p class="lede">Programs use search patterns (called regular expressions) to check text like email addresses. Some patterns can be tricked into running for minutes and freezing a website. <strong>safe-regex</strong> is a replacement that can't freeze.</p>
+    <ol class="steps" aria-label="Try it in 3 steps">
+      <li><span class="step-n" aria-hidden="true">1</span><span><strong>Pick an example</strong> pattern below.</span></li>
+      <li><span class="step-n" aria-hidden="true">2</span><span><strong>Read the verdict:</strong> is it risky?</span></li>
+      <li><span class="step-n" aria-hidden="true">3</span><span><strong>Start the race</strong> and watch.</span></li>
+    </ol>
+    <details class="glossary">
+      <summary>What do these words mean?</summary>
+      <dl>
+        <dt>Pattern (regular expression, "regex")</dt>
+        <dd>A short piece of code that describes the kind of text to look for, such as "some digits, a dash, then four digits".</dd>
+        <dt>Text to search</dt>
+        <dd>The words or characters the pattern is checked against.</dd>
+        <dt>Match</dt>
+        <dd>A piece of the text that fits the pattern.</dd>
+        <dt>Flags</dt>
+        <dd>Small switches that change how a pattern works, for example ignoring upper and lower case.</dd>
+        <dt>ReDoS (freezing)</dt>
+        <dd>Short for "regular expression denial of service": a crafted text that makes a risky pattern run for minutes, so the website or server stops responding.</dd>
+        <dt>Backtracking</dt>
+        <dd>How ordinary regex engines work: try one way, and if it fails, go back and try another. With some patterns the number of ways explodes.</dd>
+        <dt>SafeRegExp</dt>
+        <dd>This project's replacement for the built-in regex engine. It never goes back, so it always finishes in time proportional to the length of the text.</dd>
+      </dl>
+    </details>
   </header>
 
-  <section class="pattern-bar" aria-label="Pattern">
-    <label class="field grow">
-      <span>Pattern</span>
-      <span class="slashed"><span class="slash">/</span><input id="pattern" spellcheck="false" autocomplete="off" value="^(a+)+$"><span class="slash">/</span></span>
-    </label>
-    <label class="field flags">
-      <span>Flags</span>
-      <input id="flags" spellcheck="false" autocomplete="off" value="" maxlength="8">
-    </label>
-    <label class="field">
-      <span>Examples</span>
-      <select id="examples"></select>
-    </label>
-  </section>
-  <div id="pattern-status" class="status-line" role="status"></div>
-
-  <nav class="tabs" role="tablist">
-    <button role="tab" aria-selected="true" data-tab="match">Match</button>
-    <button role="tab" aria-selected="false" data-tab="automaton">Automaton</button>
-    <button role="tab" aria-selected="false" data-tab="race">Race</button>
-    <button role="tab" aria-selected="false" data-tab="checker">ReDoS checker</button>
-  </nav>
-
-  <main>
-    <section id="tab-match" class="panel" role="tabpanel">
-      <label class="field"><span>Test string</span>
-        <textarea id="subject" rows="4" spellcheck="false">aaaaaaaa</textarea></label>
-      <div id="match-out" class="match-out"></div>
-      <div id="groups-out"></div>
-    </section>
-
-    <section id="tab-automaton" class="panel" role="tabpanel" hidden>
-      <p class="hint">The automaton a backtracking engine explores (ε-free NFA): each node consumes one character class from the pattern; an edge marked <strong>×2</strong> can be taken along two different paths, and nodes outlined in red belong to the part of the pattern the ReDoS checker blames — together, the ambiguity that makes backtracking explode. Hover a node to see its part of the pattern. SafeRegExp runs the same automaton as a Pike VM: all paths at once, one pass over the input.</p>
-      <div id="graph" class="graph"></div>
-      <details><summary>Pike VM program (bytecode)</summary><pre id="program"></pre></details>
-    </section>
-
-    <section id="tab-race" class="panel" role="tabpanel" hidden>
-      <p class="hint">Both engines run in Web Workers on growing hostile inputs. The built-in engine is terminated if a single match takes longer than the time limit.</p>
-      <div class="race-controls">
-        <label class="field grow"><span>Hostile input = prefix + pump × n + suffix</span>
-          <span class="attack"><input id="atk-prefix" placeholder="prefix" spellcheck="false"><input id="atk-pump" placeholder="pump" spellcheck="false"><input id="atk-suffix" placeholder="suffix" spellcheck="false"></span>
-        </label>
-        <label class="field"><span>Time limit</span>
-          <select id="race-limit"><option value="1000">1 s</option><option value="3000" selected>3 s</option><option value="10000">10 s</option></select>
-        </label>
-        <button id="race-go" class="primary">Start race</button>
-        <button id="race-stop">Stop</button>
+  <main id="main">
+    <section class="hs-card pattern-card" aria-labelledby="h-pattern">
+      <h2 id="h-pattern">Step 1: pick a pattern</h2>
+      <div class="field">
+        <label for="examples">Pick an example</label>
+        <select id="examples" class="hs-select"></select>
       </div>
-      <div id="race-note" class="hint"></div>
-      <div id="race-chart" class="chart"></div>
-      <table id="race-table" class="data"><thead><tr><th>n</th><th>input length</th><th>SafeRegExp</th><th>built-in RegExp</th></tr></thead><tbody></tbody></table>
+      <div class="field">
+        <label for="pattern">The pattern (you can edit it)</label>
+        <span class="slashed"><span class="slash" aria-hidden="true">/</span><input id="pattern" class="hs-input mono" spellcheck="false" autocomplete="off" autocapitalize="off" value="^(a+)+$"><span class="slash" aria-hidden="true">/</span></span>
+        <p class="hint" id="pattern-hint">A pattern describes the text to look for. Change it and the verdict below updates as you type.</p>
+      </div>
+      <fieldset class="flags">
+        <legend>Options</legend>
+        <div class="flag-list">
+          <label class="check"><input type="checkbox" class="hs-check" data-flag="i"><span>Ignore upper/lower case <code>i</code></span></label>
+          <label class="check"><input type="checkbox" class="hs-check" data-flag="g"><span>Find every match <code>g</code></span></label>
+          <label class="check"><input type="checkbox" class="hs-check" data-flag="m"><span>Multiline <code>m</code></span></label>
+          <label class="check"><input type="checkbox" class="hs-check" data-flag="s"><span>Dot also matches line breaks <code>s</code></span></label>
+          <label class="check"><input type="checkbox" class="hs-check" data-flag="u"><span>Unicode <code>u</code></span></label>
+        </div>
+        <details class="more">
+          <summary>More options</summary>
+          <div class="field">
+            <label for="flags">Flags as letters (also <code>d</code> and <code>y</code>)</label>
+            <input id="flags" class="hs-input mono narrow" spellcheck="false" autocomplete="off" autocapitalize="off" maxlength="8" aria-describedby="flags-msg">
+            <p class="hint" id="flags-msg"></p>
+          </div>
+        </details>
+      </fieldset>
     </section>
 
-    <section id="tab-checker" class="panel" role="tabpanel" hidden>
-      <p class="hint">One pattern per line, either plain (<code>^(a+)+$</code>) or with slashes and flags (<code>/\s+$/g</code>). The checker finds ambiguity in the automaton, explains it, and builds an attack string; <em>Confirm</em> times your browser's engine on it.</p>
-      <textarea id="checker-in" rows="7" spellcheck="false">^(a+)+$
-/^[\s\u200c]+|[\s\u200c]+$/
+    <section class="verdict-wrap" aria-labelledby="h-verdict">
+      <h2 id="h-verdict">Step 2: read the verdict</h2>
+      <div id="verdict" aria-live="polite"></div>
+    </section>
+
+    <section class="tabs-wrap" aria-labelledby="h-tools">
+      <h2 id="h-tools">Step 3: explore</h2>
+      <div class="hs-tabs" id="tabs">
+        <div role="tablist" aria-label="Playground sections">
+          <button type="button" role="tab" id="tab-match" aria-controls="panel-match" aria-selected="true" data-tab="match">Find matches</button>
+          <button type="button" role="tab" id="tab-race" aria-controls="panel-race" aria-selected="false" tabindex="-1" data-tab="race">Speed race</button>
+          <button type="button" role="tab" id="tab-check" aria-controls="panel-check" aria-selected="false" tabindex="-1" data-tab="check">Check my patterns</button>
+          <button type="button" role="tab" id="tab-how" aria-controls="panel-how" aria-selected="false" tabindex="-1" data-tab="how">How it works <span class="tab-note">for the curious</span></button>
+        </div>
+
+        <section id="panel-match" class="panel" role="tabpanel" aria-labelledby="tab-match" tabindex="0">
+          <p class="intro">See what the pattern finds in some text. Type or paste any text, and every match is highlighted.</p>
+          <div class="field">
+            <label for="subject">Text to search</label>
+            <textarea id="subject" class="hs-textarea mono" rows="4" spellcheck="false">aaaaaaaa</textarea>
+          </div>
+          <p id="match-summary" class="result-line" role="status"></p>
+          <div id="match-out" class="match-out"></div>
+          <details id="groups-wrap" class="more" hidden>
+            <summary>Details: capture groups</summary>
+            <div id="groups-out"></div>
+          </details>
+        </section>
+
+        <section id="panel-race" class="panel" role="tabpanel" aria-labelledby="tab-race" tabindex="0" hidden>
+          <p class="intro">We give both engines a tricky text that grows step by step, and time how long each takes to answer. The built-in engine is stopped if one answer takes longer than the time limit. Nothing leaves your browser.</p>
+          <div id="race-note" class="hint"></div>
+          <div class="race-actions">
+            <button id="race-go" type="button" class="hs-btn big">Start the race</button>
+            <button id="race-stop" type="button" class="hs-btn hs-btn--secondary">Stop</button>
+            <span id="race-progress" class="hint"></span>
+          </div>
+          <div id="race-summary" class="race-summary" role="status"></div>
+          <div id="race-chart" class="chart"></div>
+          <details class="more">
+            <summary>Advanced: customise the tricky text</summary>
+            <p class="hint">The text is built as <em>Start text</em> + <em>Repeated part</em> repeated many times + <em>End text</em>.</p>
+            <div class="attack">
+              <div class="field"><label for="atk-prefix">Start text</label><input id="atk-prefix" class="hs-input mono" spellcheck="false" autocomplete="off"></div>
+              <div class="field"><label for="atk-pump">Repeated part</label><input id="atk-pump" class="hs-input mono" spellcheck="false" autocomplete="off"></div>
+              <div class="field"><label for="atk-suffix">End text</label><input id="atk-suffix" class="hs-input mono" spellcheck="false" autocomplete="off"></div>
+              <div class="field"><label for="race-limit">Time limit for the built-in engine</label>
+                <select id="race-limit" class="hs-select"><option value="1000">1 second</option><option value="3000" selected>3 seconds</option><option value="10000">10 seconds</option></select></div>
+            </div>
+          </details>
+          <details class="more">
+            <summary>Show all measurements</summary>
+            <div class="table-scroll"><table id="race-table" class="data"><thead><tr><th scope="col">Step</th><th scope="col">Text length (characters)</th><th scope="col">SafeRegExp</th><th scope="col">Built-in engine</th></tr></thead><tbody></tbody></table></div>
+          </details>
+        </section>
+
+        <section id="panel-check" class="panel" role="tabpanel" aria-labelledby="tab-check" tabindex="0" hidden>
+          <p class="intro">Paste the patterns your project uses, one per line (with or without /slashes/flags). We tell you which ones could freeze a program.</p>
+          <div class="field">
+            <label for="checker-in">Your patterns, one per line</label>
+            <textarea id="checker-in" class="hs-textarea mono" rows="7" spellcheck="false">^(a+)+$
+/^[\s‌]+|[\s‌]+$/
 ^\d{3}-\d{4}$
 /(\\*)"/g
 ^(?:[a-z0-9]+\.)*[a-z]+$
 (a)\1</textarea>
-      <button id="checker-go" class="primary">Check patterns</button>
-      <div id="checker-out"></div>
+          </div>
+          <div class="race-actions"><button id="checker-go" type="button" class="hs-btn">Check these patterns</button></div>
+          <div id="checker-out" aria-live="polite"></div>
+        </section>
+
+        <section id="panel-how" class="panel" role="tabpanel" aria-labelledby="tab-how" tabindex="0" hidden>
+          <p class="intro">Every pattern can be drawn as a map of the choices a search engine makes while reading text, one character at a time. Ordinary engines walk this map one route at a time and go back when a route fails, which is slow when there are many routes. SafeRegExp follows all routes together in a single pass, so it never goes back. Red marks show where a pattern has more than one route through the same text.</p>
+          <div id="graph" class="graph"></div>
+          <details class="more">
+            <summary>Technical detail: how to read the diagram</summary>
+            <p class="hint">The automaton a backtracking engine explores (ε-free NFA): each node consumes one character class from the pattern; an edge marked <strong>×2</strong> can be taken along two different paths, and nodes outlined in red belong to the part of the pattern the ReDoS checker blames. Hover or focus a node to select its part of the pattern. SafeRegExp runs the same automaton as a Pike VM: all paths at once, one pass over the input.</p>
+          </details>
+          <details class="more">
+            <summary>Technical detail: Pike VM program (bytecode)</summary>
+            <pre id="program"></pre>
+          </details>
+        </section>
+      </div>
     </section>
   </main>
 
-  <footer>Engine source, tests and method: <a href="https://github.com/vincentwesley/safe-regex">github.com/vincentwesley/safe-regex</a> · MIT licence</footer>
-  <div class="studio-signoff">
-    <a href="https://vwesley.dev" class="brand" data-logo-link title="Drag sideways to resize">
-      <svg class="brand-logo" role="img" aria-label="Vin's Atelier" viewBox="0 324 1707.4 432" preserveAspectRatio="xMinYMin slice" focusable="false">
-        <defs>
-          <linearGradient id="bl-g1" gradientUnits="userSpaceOnUse" x1="539.7172" y1="758.7686" x2="740.3171" y2="341.8077"> <stop offset="0"/> <stop offset="0.192"/> <stop offset="0.4301"/> <stop offset="0.6516"/> <stop offset="0.8484"/> <stop offset="1"/> </linearGradient>
-          <linearGradient id="bl-g2" gradientUnits="userSpaceOnUse" x1="1172.7065" y1="748.2726" x2="1376.4406" y2="330.6346"> <stop offset="0"/> <stop offset="0.192"/> <stop offset="0.4301"/> <stop offset="0.6516"/> <stop offset="0.8484"/> <stop offset="1"/> </linearGradient>
-          <linearGradient id="bl-g3" gradientUnits="userSpaceOnUse" x1="758.5444" y1="749.9991" x2="975.1216" y2="314.6223"> <stop offset="0"/> <stop offset="0.192"/> <stop offset="0.4301"/> <stop offset="0.6516"/> <stop offset="0.8484"/> <stop offset="1"/> </linearGradient>
-        </defs>
-        <g class="bl-left" transform="translate(-485.01 0)">
-          <polygon fill="url(#bl-g1)" points="593.01,324 485.01,540 593.01,756 701.01,756 593.01,540 701.01,324 "/>
-          <polygon fill="url(#bl-g3)" points="809.01,756 701.01,756 917.01,324 1025.01,324 "/>
-        </g>
-        <g class="bl-in" transform="translate(-485.01 0)">
-          <path d="M1218.99,594v162h-54V594h-54v162h-54V540h108c14.91,0,28.41,6.04,38.19,15.82 C1212.95,565.59,1218.99,579.09,1218.99,594z"/>
-          <rect x="948.99" y="540" width="54" height="216"/>
-        </g>
-        <g class="bl-atelier" transform="translate(-106.3 0)">
-          <path d="M830.22,651.99c0,2.09-1.3,3.14-3.89,3.14h-9.12c-2.49,0-4.19-1.15-5.08-3.44l-20.04-49.94h-107.8 l-19.89,49.94c-0.9,2.29-2.59,3.44-5.08,3.44h-9.12c-2.59,0-3.89-1.1-3.89-3.29c0-0.8,0.1-1.4,0.3-1.8l81.94-201.7 c0.9-2.29,2.64-3.44,5.23-3.44h8.97c2.59,0,4.34,1.15,5.23,3.44l81.79,201.7C830.07,650.75,830.22,651.39,830.22,651.99z M785.66,585.31l-46.5-116.78l-1.05-2.84l-0.9,2.84l-46.5,116.78H785.66z"/>
-          <path d="M884.34,653.94c-0.8,0.8-1.9,1.2-3.29,1.2h-8.07c-1.4,0-2.49-0.4-3.29-1.2c-0.8-0.8-1.2-1.89-1.2-3.29V493.05 h-20.78c-2.89,0-4.34-1.45-4.34-4.34v-7.18c0-2.89,1.45-4.34,4.34-4.34h20.63v-31.85c0-2.69,1.35-4.24,4.04-4.63l8.38-1.2 c1.49-0.2,2.67,0.05,3.51,0.75c0.85,0.7,1.27,1.8,1.27,3.29v33.64h39.92c2.89,0,4.33,1.45,4.33,4.34v7.18 c0,2.89-1.45,4.34-4.33,4.34h-39.92v157.59C885.54,652.04,885.14,653.14,884.34,653.94z"/>
-          <path d="M989.68,646.68c-13.51-8.22-24.2-19.39-32.07-33.49c-7.88-14.1-11.81-29.58-11.81-46.43 c0-16.95,3.64-32.52,10.92-46.73c7.27-14.2,17.24-25.42,29.9-33.64c12.66-8.22,26.71-12.33,42.16-12.33 c16.55,0,31,4.04,43.36,12.11c12.36,8.08,21.85,19.12,28.48,33.12c6.63,14,9.94,29.78,9.94,47.32v2.84 c-0.1,2.39-1.6,3.59-4.49,3.59H962.84c1,13.36,4.81,25.34,11.44,35.96c6.63,10.62,15.25,18.91,25.87,24.9 c10.62,5.98,22.2,8.97,34.76,8.97c10.37,0,19.99-1.72,28.86-5.16c8.87-3.44,16.9-8.3,24.07-14.58c1.1-0.9,2.09-1.35,2.99-1.35 c1.2,0,2.24,0.65,3.14,1.94l4.04,5.23c0.7,1,1.05,2,1.05,2.99c0,1.2-0.55,2.29-1.65,3.29c-8.57,7.58-18.19,13.43-28.86,17.57 c-10.67,4.14-22.13,6.21-34.39,6.21C1018.01,659.02,1003.18,654.91,989.68,646.68z M1083.88,522.43 c-5.43-10.22-12.83-18.19-22.2-23.92c-9.37-5.73-20.24-8.6-32.6-8.6c-11.46,0-22.05,2.92-31.78,8.75 c-9.72,5.83-17.59,13.9-23.62,24.22c-6.03,10.32-9.6,21.95-10.69,34.91h130.53C1092.52,544.44,1089.31,532.65,1083.88,522.43z"/>
-          <path d="M1167.23,653.94c-0.8,0.8-1.9,1.2-3.29,1.2h-8.08c-2.89,0-4.34-1.5-4.34-4.49V425.77 c0-2.89,1.45-4.34,4.34-4.34h8.08c2.99,0,4.48,1.45,4.48,4.34v224.88C1168.43,652.04,1168.03,653.14,1167.23,653.94z"/>
-          <path d="M1223.15,440.27c-0.8-0.8-1.2-1.89-1.2-3.29v-11.51c0-1.4,0.4-2.49,1.2-3.29c0.8-0.8,1.89-1.2,3.29-1.2h11.06 c1.4,0,2.49,0.4,3.29,1.2c0.8,0.8,1.2,1.89,1.2,3.29v11.51c0,1.4-0.4,2.49-1.2,3.29c-0.8,0.8-1.9,1.2-3.29,1.2h-11.06 C1225.04,441.46,1223.95,441.07,1223.15,440.27z M1239.45,653.94c-0.8,0.8-1.9,1.2-3.29,1.2h-8.07c-2.89,0-4.34-1.5-4.34-4.49 V481.54c0-2.89,1.44-4.34,4.34-4.34h8.07c2.99,0,4.49,1.45,4.49,4.34v169.11C1240.65,652.04,1240.25,653.14,1239.45,653.94z"/>
-          <path d="M1326.69,646.68c-13.51-8.22-24.2-19.39-32.07-33.49c-7.88-14.1-11.81-29.58-11.81-46.43 c0-16.95,3.64-32.52,10.92-46.73c7.27-14.2,17.24-25.42,29.9-33.64c12.66-8.22,26.71-12.33,42.16-12.33 c16.55,0,31,4.04,43.36,12.11c12.36,8.08,21.85,19.12,28.48,33.12c6.63,14,9.94,29.78,9.94,47.32v2.84 c-0.1,2.39-1.6,3.59-4.49,3.59h-143.24c1,13.36,4.81,25.34,11.44,35.96c6.63,10.62,15.25,18.91,25.87,24.9 c10.62,5.98,22.2,8.97,34.76,8.97c10.37,0,19.99-1.72,28.86-5.16c8.87-3.44,16.9-8.3,24.07-14.58c1.1-0.9,2.09-1.35,2.99-1.35 c1.2,0,2.24,0.65,3.14,1.94l4.04,5.23c0.7,1,1.05,2,1.05,2.99c0,1.2-0.55,2.29-1.65,3.29c-8.57,7.58-18.19,13.43-28.86,17.57 c-10.67,4.14-22.13,6.21-34.39,6.21C1355.03,659.02,1340.2,654.91,1326.69,646.68z M1420.89,522.43 c-5.43-10.22-12.83-18.19-22.2-23.92c-9.37-5.73-20.24-8.6-32.6-8.6c-11.46,0-22.05,2.92-31.78,8.75 c-9.72,5.83-17.59,13.9-23.62,24.22c-6.03,10.32-9.6,21.95-10.69,34.91h130.53C1429.54,544.44,1426.32,532.65,1420.89,522.43z"/>
-          <path d="M1595.16,484.08c1.69,0.9,2.54,2.09,2.54,3.59c0,0.6-0.25,1.4-0.75,2.39l-3.44,6.58 c-0.9,1.6-2.04,2.39-3.44,2.39c-1,0-1.85-0.25-2.54-0.75c-10.17-5.38-19.99-8.07-29.46-8.07c-8.87,0-17.37,2.64-25.49,7.93 c-8.13,5.28-14.68,12.78-19.66,22.5c-4.99,9.72-7.48,20.86-7.48,33.42v96.59c0,1.4-0.4,2.49-1.2,3.29c-0.8,0.8-1.9,1.2-3.29,1.2 h-8.08c-2.89,0-4.34-1.5-4.34-4.49V481.54c0-2.89,1.45-4.34,4.34-4.34h7.03c2.99,0,4.49,1.45,4.49,4.34l0.3,34.54 c2.49-7.47,6.38-14.43,11.66-20.86c5.28-6.43,11.64-11.56,19.06-15.4c7.42-3.84,15.47-5.75,24.15-5.75 C1570.93,474.06,1582.79,477.4,1595.16,484.08z"/>
-        </g>
-        <g class="bl-right"><g transform="translate(-1218.99 0)">
-          <polygon fill="url(#bl-g2)" points="1326.99,324 1434.99,540 1326.99,756 1218.99,756 1326.99,540 1218.99,324 "/>
-        </g></g>
-      </svg>
-    </a>
-    <p><span>Copyright 2026 Vin's Atelier.</span> <span>Designed and built by Vin.</span></p>
-    <p>Logo by <a href="https://www.instagram.com/portus_workstation/" target="_blank" rel="noopener noreferrer">@portus_workstation</a>
-      / <a href="https://www.instagram.com/wason25_pz/" target="_blank" rel="noopener noreferrer">@wason25_pz</a></p>
-    <p class="logo-label" id="logo-size-h">Logo</p>
-    <div class="logo-pick" role="radiogroup" aria-labelledby="logo-size-h">
-      <label><input type="radio" name="logo-form" value="short" data-logo-form /><span>Short</span></label>
-      <label><input type="radio" name="logo-form" value="middle" checked data-logo-form /><span>Middle</span></label>
-      <label><input type="radio" name="logo-form" value="long" data-logo-form /><span>Long</span></label>
+  <section class="section span-12 creator" aria-labelledby="h-creator">
+    <div class="card">
+      <div class="card__head"><h2 id="h-creator">Credits</h2></div>
+      <div class="card__body creator__body">
+        <div class="creator__fx" aria-hidden="true">
+          <i>></i>
+          <i>></i>
+          <i>></i>
+          <i>></i>
+          <i>></i>
+          <i>></i>
+          <i>></i>
+          <i>></i>
+          <i>></i>
+          <i>></i>
+          <i>></i>
+          <i>></i>
+          <i>></i>
+          <i>></i>
+          <i>></i>
+          <i>></i>
+          <b class="spark">></b><b class="spark">></b><b class="spark spark--sm">></b><b class="spark spark--sm">></b>
+        </div>
+        <div class="creator__art" aria-hidden="true">
+          <img src="house/credits/creator.webp" alt="" width="456" height="613" loading="lazy" decoding="async">
+        </div>
+        <div class="creator__text">
+          <p class="creator__eyebrow">Made by</p>
+          <p class="creator__name"><span>Vin</span></p>
+          <p class="creator__blurb">The safe-regex playground was designed and built by Vin. Find more of my work on my website, or say hi on Instagram and X.</p>
+          <ul class="creator__links">
+            <li><a href="https://vwesley.dev" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>
+              <span>vwesley.dev</span></a></li>
+            <li><a href="https://www.instagram.com/vinnql/" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1" class="fill"/></svg>
+              <span>@vinnql</span><span class="sr-only"> on Instagram</span></a></li>
+            <li><a href="https://x.com/Vin_Koe" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="fill" d="M17.8 3h3.1l-6.8 7.8L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L2 3h6.4l4.4 5.8L17.8 3zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5z"/></svg>
+              <span>@Vin_Koe</span><span class="sr-only"> on X (Twitter)</span></a></li>
+          </ul>
+          <div class="creator__brand">
+          <div class="studio-signoff">
+            <a href="https://vwesley.dev" class="brand" data-logo-link title="Drag sideways to resize">
+              <svg class="brand-logo" role="img" aria-label="Vin's Atelier" viewBox="0 324 1707.4 432" preserveAspectRatio="xMinYMin slice" focusable="false">
+                <defs>
+                  <linearGradient id="bl-g1" gradientUnits="userSpaceOnUse" x1="539.7172" y1="758.7686" x2="740.3171" y2="341.8077"> <stop offset="0"/> <stop offset="0.192"/> <stop offset="0.4301"/> <stop offset="0.6516"/> <stop offset="0.8484"/> <stop offset="1"/> </linearGradient>
+                  <linearGradient id="bl-g2" gradientUnits="userSpaceOnUse" x1="1172.7065" y1="748.2726" x2="1376.4406" y2="330.6346"> <stop offset="0"/> <stop offset="0.192"/> <stop offset="0.4301"/> <stop offset="0.6516"/> <stop offset="0.8484"/> <stop offset="1"/> </linearGradient>
+                  <linearGradient id="bl-g3" gradientUnits="userSpaceOnUse" x1="758.5444" y1="749.9991" x2="975.1216" y2="314.6223"> <stop offset="0"/> <stop offset="0.192"/> <stop offset="0.4301"/> <stop offset="0.6516"/> <stop offset="0.8484"/> <stop offset="1"/> </linearGradient>
+                </defs>
+                <g class="bl-left" transform="translate(-485.01 0)">
+                  <polygon fill="url(#bl-g1)" points="593.01,324 485.01,540 593.01,756 701.01,756 593.01,540 701.01,324 "/>
+                  <polygon fill="url(#bl-g3)" points="809.01,756 701.01,756 917.01,324 1025.01,324 "/>
+                </g>
+                <g class="bl-in" transform="translate(-485.01 0)">
+                  <path d="M1218.99,594v162h-54V594h-54v162h-54V540h108c14.91,0,28.41,6.04,38.19,15.82 C1212.95,565.59,1218.99,579.09,1218.99,594z"/>
+                  <rect x="948.99" y="540" width="54" height="216"/>
+                </g>
+                <g class="bl-atelier" transform="translate(-106.3 0)">
+                  <path d="M830.22,651.99c0,2.09-1.3,3.14-3.89,3.14h-9.12c-2.49,0-4.19-1.15-5.08-3.44l-20.04-49.94h-107.8 l-19.89,49.94c-0.9,2.29-2.59,3.44-5.08,3.44h-9.12c-2.59,0-3.89-1.1-3.89-3.29c0-0.8,0.1-1.4,0.3-1.8l81.94-201.7 c0.9-2.29,2.64-3.44,5.23-3.44h8.97c2.59,0,4.34,1.15,5.23,3.44l81.79,201.7C830.07,650.75,830.22,651.39,830.22,651.99z M785.66,585.31l-46.5-116.78l-1.05-2.84l-0.9,2.84l-46.5,116.78H785.66z"/>
+                  <path d="M884.34,653.94c-0.8,0.8-1.9,1.2-3.29,1.2h-8.07c-1.4,0-2.49-0.4-3.29-1.2c-0.8-0.8-1.2-1.89-1.2-3.29V493.05 h-20.78c-2.89,0-4.34-1.45-4.34-4.34v-7.18c0-2.89,1.45-4.34,4.34-4.34h20.63v-31.85c0-2.69,1.35-4.24,4.04-4.63l8.38-1.2 c1.49-0.2,2.67,0.05,3.51,0.75c0.85,0.7,1.27,1.8,1.27,3.29v33.64h39.92c2.89,0,4.33,1.45,4.33,4.34v7.18 c0,2.89-1.45,4.34-4.33,4.34h-39.92v157.59C885.54,652.04,885.14,653.14,884.34,653.94z"/>
+                  <path d="M989.68,646.68c-13.51-8.22-24.2-19.39-32.07-33.49c-7.88-14.1-11.81-29.58-11.81-46.43 c0-16.95,3.64-32.52,10.92-46.73c7.27-14.2,17.24-25.42,29.9-33.64c12.66-8.22,26.71-12.33,42.16-12.33 c16.55,0,31,4.04,43.36,12.11c12.36,8.08,21.85,19.12,28.48,33.12c6.63,14,9.94,29.78,9.94,47.32v2.84 c-0.1,2.39-1.6,3.59-4.49,3.59H962.84c1,13.36,4.81,25.34,11.44,35.96c6.63,10.62,15.25,18.91,25.87,24.9 c10.62,5.98,22.2,8.97,34.76,8.97c10.37,0,19.99-1.72,28.86-5.16c8.87-3.44,16.9-8.3,24.07-14.58c1.1-0.9,2.09-1.35,2.99-1.35 c1.2,0,2.24,0.65,3.14,1.94l4.04,5.23c0.7,1,1.05,2,1.05,2.99c0,1.2-0.55,2.29-1.65,3.29c-8.57,7.58-18.19,13.43-28.86,17.57 c-10.67,4.14-22.13,6.21-34.39,6.21C1018.01,659.02,1003.18,654.91,989.68,646.68z M1083.88,522.43 c-5.43-10.22-12.83-18.19-22.2-23.92c-9.37-5.73-20.24-8.6-32.6-8.6c-11.46,0-22.05,2.92-31.78,8.75 c-9.72,5.83-17.59,13.9-23.62,24.22c-6.03,10.32-9.6,21.95-10.69,34.91h130.53C1092.52,544.44,1089.31,532.65,1083.88,522.43z"/>
+                  <path d="M1167.23,653.94c-0.8,0.8-1.9,1.2-3.29,1.2h-8.08c-2.89,0-4.34-1.5-4.34-4.49V425.77 c0-2.89,1.45-4.34,4.34-4.34h8.08c2.99,0,4.48,1.45,4.48,4.34v224.88C1168.43,652.04,1168.03,653.14,1167.23,653.94z"/>
+                  <path d="M1223.15,440.27c-0.8-0.8-1.2-1.89-1.2-3.29v-11.51c0-1.4,0.4-2.49,1.2-3.29c0.8-0.8,1.89-1.2,3.29-1.2h11.06 c1.4,0,2.49,0.4,3.29,1.2c0.8,0.8,1.2,1.89,1.2,3.29v11.51c0,1.4-0.4,2.49-1.2,3.29c-0.8,0.8-1.9,1.2-3.29,1.2h-11.06 C1225.04,441.46,1223.95,441.07,1223.15,440.27z M1239.45,653.94c-0.8,0.8-1.9,1.2-3.29,1.2h-8.07c-2.89,0-4.34-1.5-4.34-4.49 V481.54c0-2.89,1.44-4.34,4.34-4.34h8.07c2.99,0,4.49,1.45,4.49,4.34v169.11C1240.65,652.04,1240.25,653.14,1239.45,653.94z"/>
+                  <path d="M1326.69,646.68c-13.51-8.22-24.2-19.39-32.07-33.49c-7.88-14.1-11.81-29.58-11.81-46.43 c0-16.95,3.64-32.52,10.92-46.73c7.27-14.2,17.24-25.42,29.9-33.64c12.66-8.22,26.71-12.33,42.16-12.33 c16.55,0,31,4.04,43.36,12.11c12.36,8.08,21.85,19.12,28.48,33.12c6.63,14,9.94,29.78,9.94,47.32v2.84 c-0.1,2.39-1.6,3.59-4.49,3.59h-143.24c1,13.36,4.81,25.34,11.44,35.96c6.63,10.62,15.25,18.91,25.87,24.9 c10.62,5.98,22.2,8.97,34.76,8.97c10.37,0,19.99-1.72,28.86-5.16c8.87-3.44,16.9-8.3,24.07-14.58c1.1-0.9,2.09-1.35,2.99-1.35 c1.2,0,2.24,0.65,3.14,1.94l4.04,5.23c0.7,1,1.05,2,1.05,2.99c0,1.2-0.55,2.29-1.65,3.29c-8.57,7.58-18.19,13.43-28.86,17.57 c-10.67,4.14-22.13,6.21-34.39,6.21C1355.03,659.02,1340.2,654.91,1326.69,646.68z M1420.89,522.43 c-5.43-10.22-12.83-18.19-22.2-23.92c-9.37-5.73-20.24-8.6-32.6-8.6c-11.46,0-22.05,2.92-31.78,8.75 c-9.72,5.83-17.59,13.9-23.62,24.22c-6.03,10.32-9.6,21.95-10.69,34.91h130.53C1429.54,544.44,1426.32,532.65,1420.89,522.43z"/>
+                  <path d="M1595.16,484.08c1.69,0.9,2.54,2.09,2.54,3.59c0,0.6-0.25,1.4-0.75,2.39l-3.44,6.58 c-0.9,1.6-2.04,2.39-3.44,2.39c-1,0-1.85-0.25-2.54-0.75c-10.17-5.38-19.99-8.07-29.46-8.07c-8.87,0-17.37,2.64-25.49,7.93 c-8.13,5.28-14.68,12.78-19.66,22.5c-4.99,9.72-7.48,20.86-7.48,33.42v96.59c0,1.4-0.4,2.49-1.2,3.29c-0.8,0.8-1.9,1.2-3.29,1.2 h-8.08c-2.89,0-4.34-1.5-4.34-4.49V481.54c0-2.89,1.45-4.34,4.34-4.34h7.03c2.99,0,4.49,1.45,4.49,4.34l0.3,34.54 c2.49-7.47,6.38-14.43,11.66-20.86c5.28-6.43,11.64-11.56,19.06-15.4c7.42-3.84,15.47-5.75,24.15-5.75 C1570.93,474.06,1582.79,477.4,1595.16,484.08z"/>
+                </g>
+                <g class="bl-right"><g transform="translate(-1218.99 0)">
+                  <polygon fill="url(#bl-g2)" points="1326.99,324 1434.99,540 1326.99,756 1218.99,756 1326.99,540 1218.99,324 "/>
+                </g></g>
+              </svg>
+            </a>
+            <p><span>Copyright 2026 Vin's Atelier.</span> <span>Designed and built by Vin.</span></p>
+            <p class="logo-label" id="logo-size-h">Logo</p>
+            <div class="logo-pick" role="radiogroup" aria-labelledby="logo-size-h">
+              <label><input type="radio" name="logo-form" value="short" data-logo-form /><span>Short</span></label>
+              <label><input type="radio" name="logo-form" value="middle" checked data-logo-form /><span>Middle</span></label>
+              <label><input type="radio" name="logo-form" value="long" data-logo-form /><span>Long</span></label>
+            </div>
+          </div>
+            <p class="creator__eyebrow">Logo by</p>
+            <ul class="creator__links creator__links--credit">
+              <li><a href="https://www.instagram.com/portus_workstation/" target="_blank" rel="noopener noreferrer"><span>@portus_workstation</span><span class="sr-only"> on Instagram (logo artist)</span></a></li>
+              <li><a href="https://www.instagram.com/wason25_pz/" target="_blank" rel="noopener noreferrer"><span>@wason25_pz</span><span class="sr-only"> on Instagram (logo artist, main account)</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
+  </section>
   </div>
   <script type="module" src="app.js"></script>
+  <script type="module" src="house/credits/credits.js"></script>
   <script type="module" src="logo-resize.js"></script>
 </body>
 </html>

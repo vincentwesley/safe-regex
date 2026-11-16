@@ -1,14 +1,32 @@
 /* Vin's Atelier logo (credits sign-off). ONE variable drives it: --logo-x, the right chevron's start in viewBox units
    (540 short, 734 middle, 1491.4 long). Unit: 1 unit = 2.5rem / 470; the chevrons are 432 units tall.
    html[data-logo] holds the chosen form (set before paint by the pre-paint script). Ported from the portfolio's chrome.css. */
+.creator__brand {
+  container-type: inline-size;
+}
 .studio-signoff {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  /* Stable layout: the logo slot always reserves the LONG form's width, so the credit lines and the radios never
+     move when the form changes (radios, snap, or dragging). Narrow containers stack: logo, credits, radios. */
+  --logo-slot: calc((1491.4 + 216) * 2.5rem / 470);
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: start;
   gap: 0.75rem 1.25rem;
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid var(--border);
+}
+@container (min-width: 44rem) {
+  .studio-signoff {
+    grid-template-columns: var(--logo-slot) 1fr auto auto;
+    align-items: center;
+  }
+}
+@media (max-width: 600px) {
+  .studio-signoff {
+    justify-items: center;
+    text-align: center;
+  }
 }
 .studio-signoff p {
   margin: 0;
@@ -34,12 +52,12 @@
 }
 @supports (color: oklch(from red l c h)) {
   .studio-signoff .brand-logo {
-    --lg-0: oklch(from var(--series-safe) 0.8212 calc(0.1542 * min(1, c / 0.12)) calc(h + 1.7));
-    --lg-1: oklch(from var(--series-safe) 0.7313 calc(0.1207 * min(1, c / 0.12)) calc(h + 5));
-    --lg-2: oklch(from var(--series-safe) 0.6355 calc(0.0813 * min(1, c / 0.12)) calc(h + 11.3));
-    --lg-3: oklch(from var(--series-safe) 0.5657 calc(0.0498 * min(1, c / 0.12)) calc(h + 22.9));
-    --lg-4: oklch(from var(--series-safe) 0.5246 calc(0.0317 * min(1, c / 0.12)) calc(h + 41.3));
-    --lg-5: oklch(from var(--series-safe) 0.509 calc(0.0263 * min(1, c / 0.12)) calc(h + 53.2));
+    --lg-0: oklch(from var(--accent) 0.8212 calc(0.1542 * min(1, c / 0.12)) calc(h + 1.7));
+    --lg-1: oklch(from var(--accent) 0.7313 calc(0.1207 * min(1, c / 0.12)) calc(h + 5));
+    --lg-2: oklch(from var(--accent) 0.6355 calc(0.0813 * min(1, c / 0.12)) calc(h + 11.3));
+    --lg-3: oklch(from var(--accent) 0.5657 calc(0.0498 * min(1, c / 0.12)) calc(h + 22.9));
+    --lg-4: oklch(from var(--accent) 0.5246 calc(0.0317 * min(1, c / 0.12)) calc(h + 41.3));
+    --lg-5: oklch(from var(--accent) 0.509 calc(0.0263 * min(1, c / 0.12)) calc(h + 53.2));
   }
 }
 .studio-signoff .brand-logo stop:nth-child(1) { stop-color: var(--lg-0); }
@@ -81,12 +99,10 @@ html[data-logo="long"] {
   transform: translateX(calc(var(--logo-x) * 1px));
 }
 .studio-signoff :is(.bl-in, .bl-atelier) {
-  fill: #333333;
+  fill: #ffffff;
 }
-@media (prefers-color-scheme: dark) {
-  .studio-signoff :is(.bl-in, .bl-atelier) {
-    fill: #ffffff;
-  }
+:root[data-theme="light"] .studio-signoff :is(.bl-in, .bl-atelier) {
+  fill: #333333;
 }
 /* "in" (464..734 wide) is uncovered as the chevron passes (gone at 540), then fades out by 900 as "Atelier" comes in. */
 .studio-signoff .bl-in {
@@ -155,7 +171,7 @@ html[data-logo="long"] .studio-signoff .brand-logo {
 
 /* Logo size radios (segmented group; native radios keep the arrow-key behaviour). */
 .studio-signoff .logo-label {
-  color: var(--text-secondary);
+  color: var(--fg-muted);
   font-size: 0.875rem;
   font-weight: 600;
 }
@@ -163,7 +179,7 @@ html[data-logo="long"] .studio-signoff .brand-logo {
   display: inline-flex;
   gap: 2px;
   padding: 2px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: 999px;
 }
 .studio-signoff .logo-pick label {
@@ -174,7 +190,7 @@ html[data-logo="long"] .studio-signoff .brand-logo {
   min-height: 2.75rem;
   padding-inline: 0.75rem;
   border-radius: 999px;
-  color: var(--text-secondary);
+  color: var(--fg-muted);
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
@@ -187,11 +203,11 @@ html[data-logo="long"] .studio-signoff .brand-logo {
   cursor: pointer;
 }
 .studio-signoff .logo-pick label:has(input:checked) {
-  background: var(--surface-0);
-  color: var(--text-primary);
-  box-shadow: inset 0 0 0 1px var(--border);
+  background: var(--bg);
+  color: var(--fg);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
 }
 .studio-signoff .logo-pick label:has(input:focus-visible) {
-  outline: 3px solid var(--series-safe);
+  outline: 3px solid var(--focus);
   outline-offset: 2px;
 }

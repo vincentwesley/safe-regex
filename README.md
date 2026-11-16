@@ -7,6 +7,14 @@
 
 **A JavaScript regular-expression engine that can't be made to hang.** `SafeRegExp` has the same API and gives the same results as the built-in `RegExp`, but it compiles the pattern to an automaton and matches it in time proportional to the input. Catastrophic backtracking — the cause of ReDoS outages — cannot happen, whatever the pattern and whatever the input.
 
+## New here? What is this?
+
+A **regular expression** ("regex") is a short search pattern that programs use to check text, for example "does this look like an email address?". Most of the time it works fine. But some patterns can be tricked: a specially crafted text makes the program try an enormous number of ways to match, and it runs for minutes instead of milliseconds. That is called **ReDoS** (a "freezing" attack). In 2016 a single pattern like this took Stack Overflow offline for 34 minutes.
+
+**safe-regex** is a replacement regex engine for JavaScript that can't freeze like that: it always finishes in time proportional to the length of the text. It also includes a checker that tells you which of your existing patterns are risky.
+
+**Try it in your browser: https://vincentwesley.github.io/safe-regex/ - no install needed.**
+
 ```js
 import { SafeRegExp } from '@vincentwesley/safe-regex';
 
@@ -270,7 +278,7 @@ Limits: it ignores assertions other than `^`/`$` (which can only cause false ala
 
 Live: https://vincentwesley.github.io/safe-regex/
 
-A static site: match view, automaton drawing, a live race against your browser's engine, and the multi-pattern checker.
+A static site written for people who have never heard of regular expressions: pick an example, read a plain-language verdict, race the built-in engine against SafeRegExp live, check your own patterns, and see how it works. No install needed.
 
 ```bash
 npm ci
@@ -325,4 +333,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Security reports: [SECURITY.md](SECURITY
 [MIT](LICENSE)
 
 ## Credits
-Designed and built by Vin, Vin's Atelier (https://vwesley.dev). Logo by @portus_workstation / @wason25_pz (Instagram); the logo is all rights reserved (see NOTICE.md), not covered by the MIT licence.
+Designed and built by Vin, Vin's Atelier (https://vwesley.dev). Logo by @portus_workstation / @wason25_pz (Instagram); the logo is all rights reserved (see NOTICE.md), not covered by the MIT licence. The playground also bundles the owner's credits artwork (all rights reserved, see NOTICE.md) and self-hosted fonts under the SIL Open Font License (see THIRD_PARTY_NOTICES.md).

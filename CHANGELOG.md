@@ -5,6 +5,7 @@ All notable changes to this project are documented here. The format follows [Kee
 ## [Unreleased]
 
 ### Changed
+- Playground redesigned for people with no coding background: plain-language intro, 3-step guide and glossary, a verdict card that explains each result in everyday words (risky, can be slow, safe, couldn't check, can't run), friendly flag checkboxes, clearer tabs (Find matches, Speed race, Check my patterns, How it works) reachable by URL hash, a plain summary after each race. Adopted the house design kit (dark by default, theme toggle, self-hosted fonts, credits card). Fixed the duplicated "Exponential Exponential" status text and the footer logo/credits row that re-wrapped when the logo was resized (the logo slot now reserves the long form's width). Added `NOTICE.md` entries and `THIRD_PARTY_NOTICES.md`.
 - Removed the `prepare` script, so installing or cloning the repository no longer runs a build automatically. Install from npm (`npm install @vincentwesley/safe-regex`); `npm publish` now builds and tests first via `prepublishOnly`.
 - Package author credit is now "Vin, Vin's Atelier".
 
