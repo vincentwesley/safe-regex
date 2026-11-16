@@ -66,6 +66,6 @@ jobs:
 
 The site would then be at `https://vincentwesley.github.io/safe-regex/`; add that link to the README.
 
-## 4. Optional: publish to npm
+## 4. Optional: publish to npm — done 2026-11-16
 
-Deliberately not done (needs your npm token). If you want it: `npm login`, then `npm publish --access public` from a clean checkout of the tag. The package name is `@vincentwesley/safe-regex`; change it in `package.json` first if you prefer another scope.
+**Done 2026-11-16:** `@vincentwesley/safe-regex@1.0.0` published from a clean checkout of the `v1.0.0` tag (npm org `vincentwesley`, 2FA by security key): https://www.npmjs.com/package/@vincentwesley/safe-regex. Future releases: `npm publish --access public` from a real terminal (the security-key approval needs an interactive prompt).
