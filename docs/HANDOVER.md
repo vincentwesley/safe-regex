@@ -40,3 +40,4 @@ See `docs/NEEDS-VIN.md` for exact steps:
 2. ~~Enable private vulnerability reporting~~ Done 2026-11-15.
 3. ~~GitHub Pages for the playground~~ Done 2026-11-15: https://vincentwesley.github.io/safe-regex/ (`.github/workflows/pages.yml`).
 4. ~~npm publish~~ Done 2026-11-16: https://www.npmjs.com/package/@vincentwesley/safe-regex
+- 2026-11-17 hygiene sweep: qa-output/ gitignored, dependabot and .nvmrc (24) added.
