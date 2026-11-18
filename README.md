@@ -332,5 +332,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Security reports: [SECURITY.md](SECURITY
 
 [MIT](LICENSE)
 
+Provided "as is", without warranty of any kind; use at your own risk.
+
 ## Credits
 Designed and built by Vin, Vin's Atelier (https://vwesley.dev). Logo by @portus_workstation / @wason25_pz (Instagram); the logo is all rights reserved (see NOTICE.md), not covered by the MIT licence. The playground also bundles the owner's credits artwork (all rights reserved, see NOTICE.md) and self-hosted fonts under the SIL Open Font License (see THIRD_PARTY_NOTICES.md).
